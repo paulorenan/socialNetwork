@@ -4,9 +4,12 @@ import MyContext from './Context';
 import axios from 'axios';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
+import Profile from './Pages/Profile';
+import SignUp from './Pages/SignUp';
 
 function App() {
   const { token, auth, setAuth } = useContext(MyContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -21,19 +24,34 @@ function App() {
       }
     }
     if(token){
+      setLoading(true);
       load();
+      setLoading(false);
     }
+    setLoading(false);
   }, [token, setAuth]);
 
   return (
-    <Routes>
-      {auth ? (
-        <Route path="/" element={<Home />} />
+    <div>
+      {!loading ? (
+      <Routes>
+        {auth ? (
+          <>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          </>
+        ) : (
+          <>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          </>
+        )}
+        <Route path="*" element={<Navigate to={auth ? "/" : "/login" } /> } />
+      </Routes>
       ) : (
-        <Route path="/login" element={<Login />} />
+        null
       )}
-      <Route path="*" element={<Navigate to={auth ? "/" : "/login" } /> } />
-    </Routes>
+    </div>
   );
 }
 

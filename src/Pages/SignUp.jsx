@@ -30,21 +30,24 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-function Login() {
+export default function SignUp() {
+  const [name, setName] = useState('')
+  const [nickName, setNickName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const {token, setToken, user, setUser, auth, setAuth} = useContext(MyContext)
 
-  const login = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     setLoading(true)
-    axios.post('http://localhost:5432/api/login', {
+    axios.post('http://localhost:5432/api/users', {
+      name,
+      nickName,
       email,
       password
-    })
-    .then(res => {
+    }).then(res => {
       localStorage.setItem('token', res.data.token)
       localStorage.setItem('user', JSON.stringify(res.data.user))
       setToken(res.data.token)
@@ -77,55 +80,82 @@ function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign up
           </Typography>
-          <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="Name"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="Name"
+                  autoFocus
+                  onChange={(event) => setName(event.target.value)}
+                  value={name}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Nickname"
+                  name="nickname"
+                  autoComplete="family-name"
+                  onChange={(event) => setNickName(event.target.value)}
+                  value={nickName}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  onChange={(event) => setEmail(event.target.value)}
+                  value={email}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  onChange={(event) => setPassword(event.target.value)}
+                  value={password}
+                />
+              </Grid>
+              <Grid item xs={12}>
+              </Grid>
+            </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Sign Up
             </Button>
-            <Grid container>
+            <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/login" variant="body2">
+                  Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );
-
 }
-
-export default Login
