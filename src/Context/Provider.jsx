@@ -20,6 +20,16 @@ function Provider({children}) {
   , [])
 
   useEffect(() => {
+    setInterval(() => {
+      console.log("working")
+      axios.get(`${URL}posts`)
+        .then(res => {
+          setPosts(res.data)
+        })
+    }, 5000)
+  }, [])
+
+  useEffect(() => {
     fetchPosts()
   }, [])
 
