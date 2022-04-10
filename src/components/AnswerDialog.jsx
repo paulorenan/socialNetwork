@@ -70,17 +70,18 @@ export default function ScrollDialog(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios.defaults.headers.common['Authorization'] = token;
-    axios.post(`${URL}answers`, {
-      postId: post.id,
-      content: answer
-    })
-      .then(() => {
-        getAnswers()
-        setAnswer('')
-      }).catch(err => {
-        console.log(err)
-      }
-      )
+    if(answer.trim() !== '') {
+      axios.post(`${URL}answers`, {
+        postId: post.id,
+        content: answer
+      }).then(() => {
+          getAnswers()
+          setAnswer('')
+        }).catch(err => {
+          console.log(err)
+        })
+    }
+    setAnswer('')
   }
 
   const getAnswers = async () => {
@@ -92,7 +93,7 @@ export default function ScrollDialog(props) {
 
   return (
     <div>
-      <Button onClick={handleClickOpen('paper')} size="small">{post.answers} Answers</Button>
+      <Button onClick={handleClickOpen('paper')} size="small">{post.answers} Comments</Button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -102,11 +103,9 @@ export default function ScrollDialog(props) {
       >
         <DialogContent dividers={scroll === 'paper'}>
           <CardForAnswer post={post} />
-          {post.answers > 0 && 
           <Typography gutterBottom>
             Answers:
           </Typography>
-          }
           {answers.map(answer => (
             <CardForAnswer key={answer.id} post={answer} />
           ))}
@@ -120,8 +119,8 @@ export default function ScrollDialog(props) {
             >
               <InputBase
                 sx={{ ml: 1, flex: 1 }}
-                placeholder="Write your answer"
-                inputProps={{ 'aria-label': 'write your answer' }}
+                placeholder="Write your comment"
+                inputProps={{ 'aria-label': 'write your comment' }}
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
               />

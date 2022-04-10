@@ -19,9 +19,11 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box } from '@mui/material';
 import MyContext from '../Context';
 import PostCard from '../components/PostCard'
+import NotLogged from '../components/NotLogged'
+import WritePost from '../components/WritePost'
 
 function Home() {
-  const { posts } = useContext(MyContext)
+  const { posts, auth } = useContext(MyContext)
   let navigate = useNavigate()
 
   return (
@@ -32,9 +34,10 @@ function Home() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          height: '100vh',
+          minHeight: '100vh',
         }}
-      >     
+      >
+        {auth ? <WritePost /> : <NotLogged />}
         {posts.map(post => (
           <PostCard key={post.id} post={post} />
         ))}

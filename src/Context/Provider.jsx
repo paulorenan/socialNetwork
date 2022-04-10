@@ -20,12 +20,14 @@ function Provider({children}) {
   , [])
 
   useEffect(() => {
-    async function fetchPosts() {
-      const res = await axios.get(`${URL}posts`)
-      setPosts(res.data)
-    }
     fetchPosts()
   }, [])
+
+  async function fetchPosts() {
+    const res = await axios.get(`${URL}posts`)
+    setPosts(res.data)
+  }
+
 
   useEffect(() => {
     async function load() {
@@ -70,6 +72,7 @@ function Provider({children}) {
     handleLogin,
     posts,
     loginError,
+    fetchPosts,
   };
 
   return (

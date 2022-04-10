@@ -47,11 +47,9 @@ function Login() {
     .then(res => {
       handleLogin(res.data.token, res.data.user);
       setLoading(false);
-      console.log(res);
     }).catch(err => {
       loginError();
       setLoading(false);
-      console.log(err);
     });
   };
 
