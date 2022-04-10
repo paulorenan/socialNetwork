@@ -6,6 +6,7 @@ function Provider({children}) {
   const [token, setToken] = useState(null)
   const [user, setUser] = useState(null)
   const [auth, setAuth] = useState(false)
+  const [posts, setPosts] = useState([])
   const URL = 'http://localhost:5432/api/'
 
   useEffect(() => {
@@ -17,6 +18,14 @@ function Provider({children}) {
     }
   }
   , [])
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const res = await axios.get(`${URL}posts`)
+      setPosts(res.data)
+    }
+    fetchPosts()
+  }, [])
 
   useEffect(() => {
     async function load() {
@@ -59,6 +68,7 @@ function Provider({children}) {
     setAuth,
     URL,
     handleLogin,
+    posts,
     loginError,
   };
 
