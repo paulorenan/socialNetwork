@@ -37,30 +37,24 @@ export default function SignUp() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const {token, setToken, user, setUser, auth, setAuth} = useContext(MyContext)
+  const { handleLogin, loginError, URL } = useContext(MyContext)
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setLoading(true)
-    axios.post('http://localhost:5432/api/users', {
+    axios.post(`${URL}users`, {
       name,
       nickName,
       email,
       password
     }).then(res => {
-      localStorage.setItem('token', res.data.token)
-      localStorage.setItem('user', JSON.stringify(res.data.user))
-      setToken(res.data.token)
-      setUser(res.data.user)
-      setAuth(true)
+      handleLogin(res.data.token, res.data.user);
       setLoading(false)
       console.log(res);
     }).catch(err => {
-      setToken(null)
-      setUser(null)
-      setAuth(false)
+      loginError();
       setLoading(false)
-      console.log(err);
+      console.log(err.response.data);
     });
   };
 
@@ -82,7 +76,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField

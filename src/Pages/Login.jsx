@@ -35,28 +35,22 @@ function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const {token, setToken, user, setUser, auth, setAuth} = useContext(MyContext)
+  const { URL, handleLogin, loginError} = useContext(MyContext)
 
   const login = (event) => {
     event.preventDefault();
-    setLoading(true)
-    axios.post('http://localhost:5432/api/login', {
+    setLoading(true);
+    axios.post(`${URL}login`, {
       email,
       password
     })
     .then(res => {
-      localStorage.setItem('token', res.data.token)
-      localStorage.setItem('user', JSON.stringify(res.data.user))
-      setToken(res.data.token)
-      setUser(res.data.user)
-      setAuth(true)
-      setLoading(false)
+      handleLogin(res.data.token, res.data.user);
+      setLoading(false);
       console.log(res);
     }).catch(err => {
-      setToken(null)
-      setUser(null)
-      setAuth(false)
-      setLoading(false)
+      loginError();
+      setLoading(false);
       console.log(err);
     });
   };
@@ -79,11 +73,11 @@ function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={login} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
-              required
               fullWidth
+              required
               id="email"
               label="Email Address"
               name="email"
@@ -94,8 +88,8 @@ function Login() {
             />
             <TextField
               margin="normal"
-              required
               fullWidth
+              required
               name="password"
               label="Password"
               type="password"
