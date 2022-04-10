@@ -7,7 +7,7 @@ function Provider({children}) {
   const [user, setUser] = useState(null)
   const [auth, setAuth] = useState(false)
   const [posts, setPosts] = useState([])
-  const URL = 'http://localhost:5432/api/'
+  const URL = 'https://the-social-back.herokuapp.com/api/'
 
   useEffect(() => {
     const storageToken = localStorage.getItem('token')
