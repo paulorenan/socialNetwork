@@ -84,7 +84,7 @@ export default function SignUp() {
                   name="Name"
                   required
                   fullWidth
-                  id="firstName"
+                  id="Name"
                   label="Name"
                   autoFocus
                   onChange={(event) => setName(event.target.value)}
@@ -95,10 +95,10 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
+                  id="Nickname"
                   label="Nickname"
                   name="nickname"
-                  autoComplete="family-name"
+                  autoComplete="nickname"
                   onChange={(event) => setNickName(event.target.value)}
                   value={nickName}
                 />
