@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -21,11 +22,16 @@ import AnswerDialog from './AnswerDialog'
 
 function PostCard(props) {
   const { post } = props
+  const navigate = useNavigate()
   return (
     <Card sx={{ maxWidth: 600, minWidth: 350, margin: 1 }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Avatar 
+            sx={{ bgcolor: red[500], cursor: 'pointer' }}
+            aria-label="recipe"
+            onClick={() => navigate(`/p/${post.User.nickName}`)}
+          >
             {post.User.image ? <img src={post.User.image} alt="user" /> : post.User.name[0]}
           </Avatar>
         }
@@ -35,12 +41,22 @@ function PostCard(props) {
           </IconButton>
         }
         title={
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box
+            sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+            onClick={() => navigate(`/p/${post.User.nickName}`)}
+          >
             <Box sx={{ fontWeight: 'bold' }}>{post.User.name}</Box>
             <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
           </Box>
         } 
-        subheader={`@${post.User.nickName}`}
+        subheader={
+            <Box
+              onClick={() => navigate(`/p/${post.User.nickName}`)}
+              sx={{ cursor: 'pointer' }}
+              >
+                @{post.User.nickName}
+            </Box>
+        }
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
