@@ -27,7 +27,7 @@ export default function CardForAnswer(props) {
   const { post } = props;
   return (
     <Box 
-      sx={{ maxWidth: 600, minWidth: 350, borderTop: '1px solid #e0e0e0' }}
+      sx={{ maxWidth: 600, minWidth: 350, borderTop: '1px solid #e0e0e0', margin: 1 }}
     >
       <CardHeader
         avatar={

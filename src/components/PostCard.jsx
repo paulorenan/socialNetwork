@@ -87,7 +87,7 @@ function PostCard(props) {
           onClick={handleExpandClick}
           sx={{ cursor: 'pointer' }}
         >
-          {post.answers} Answers
+          {post.answers === 1 ? `${post.answers} Comment` : `${post.answers} Comments`}
         </Button>
         <ExpandMore
           expand={expanded}
