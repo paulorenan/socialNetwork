@@ -29,9 +29,8 @@ function Profile() {
       <Header />
       {loading ? null : error ? <h1>User not found</h1> : (
         <div>
-          <h1>{user.nickname}</h1>
-          <h2>{user.email}</h2>
-          <h2>{user.name}</h2>
+          <h1>{user.name}</h1>
+          <h2>@{user.nickName}</h2>
         </div>
       )}
     </div>
