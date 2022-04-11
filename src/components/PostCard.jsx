@@ -20,11 +20,29 @@ import { Box } from '@mui/material';
 import isMoment from 'moment';
 import AnswerDialog from './AnswerDialog'
 
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
 function PostCard(props) {
   const { post } = props
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
   const navigate = useNavigate()
+
   return (
-    <Card sx={{ maxWidth: 600, minWidth: 350, margin: 1 }}>
+    <Card sx={{ maxWidth: 350, minWidth: 350, margin: 1 }}>
       <CardHeader
         avatar={
           <Avatar 
@@ -64,8 +82,19 @@ function PostCard(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <AnswerDialog post={post}/>
+        <Typography variant="body2" color="text.secondary" onClick={handleExpandClick}>
+          {post.answers} Answers
+        </Typography>
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
       </CardActions>
+        <AnswerDialog post={post} expanded={expanded} />
     </Card>
   )
 }

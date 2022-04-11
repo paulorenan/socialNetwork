@@ -39,7 +39,7 @@ export default function ScrollDialog(props) {
   const [answers, setAnswers] = React.useState([]);
   const [answer, setAnswer] = React.useState('');
   const { URL, auth, token } = React.useContext(MyContext);
-  const { post } = props
+  const { post, expanded } = props
 
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
@@ -47,11 +47,14 @@ export default function ScrollDialog(props) {
   };
 
   React.useEffect(() => {
+    if (expanded) {
     axios.get(`${URL}answers/${post.id}`)
       .then(res => {
+        console.log(res.data)
         setAnswers(res.data)
       })
-  }, [post.id])
+    }
+  }, [post.id, URL, expanded])
 
   const handleClose = () => {
     setOpen(false);
@@ -92,47 +95,28 @@ export default function ScrollDialog(props) {
   }
 
   return (
-    <div>
-      <Button onClick={handleClickOpen('paper')} size="small">{post.answers} Comments</Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        scroll={scroll}
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-      >
-        <DialogContent dividers={scroll === 'paper'}>
-          <CardForAnswer post={post} />
-          {answers.length > 0 && 
-            <Typography>
-              Comments:
-            </Typography>
-          }
-          {answers.map(answer => (
-            <CardForAnswer key={answer.id} post={answer} />
-          ))}
-        </DialogContent>
-        <DialogActions>
-          {auth &&
-            <Paper
-              component="form"
-              sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-              onSubmit={handleSubmit}
-            >
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="Write your comment"
-                inputProps={{ 'aria-label': 'write your comment' }}
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-              />
-              <IconButton type="submit" sx={{ p: '10px' }} aria-label="send">
-                <SendIcon />
-              </IconButton>
-            </Paper>
-          }
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Collapse in={expanded} timeout="auto" unmountOnExit>
+      {answers.map(answer => (
+        <CardForAnswer key={answer.id} post={answer} />
+      ))}
+      {auth &&
+        <Paper
+          component="form"
+          sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%' }}
+          onSubmit={handleSubmit}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Write your comment"
+            inputProps={{ 'aria-label': 'write your comment' }}
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+          />
+          <IconButton type="submit" sx={{ p: '10px' }} aria-label="send">
+            <SendIcon />
+          </IconButton>
+        </Paper>
+      }
+    </Collapse>
   );
 }
