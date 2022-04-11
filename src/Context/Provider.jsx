@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import { useNavigate } from 'react-router-dom'
 import MyContext from '.'
 import axios from 'axios'
 
@@ -7,6 +8,7 @@ function Provider({children}) {
   const [user, setUser] = useState(null)
   const [auth, setAuth] = useState(false)
   const [posts, setPosts] = useState([])
+  const navigate = useNavigate()
   const URL = 'https://the-social-back.herokuapp.com/api/'
 
   useEffect(() => {
@@ -59,6 +61,15 @@ function Provider({children}) {
     setUser(null)
     setAuth(false)
   }
+
+  const logout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    setToken(null)
+    setUser(null)
+    setAuth(false)
+    navigate('/login')
+  }
   
 
   const contextValue = {
@@ -74,6 +85,7 @@ function Provider({children}) {
     setPosts,
     loginError,
     fetchPosts,
+    logout
   };
 
   return (
