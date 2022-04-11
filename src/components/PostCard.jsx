@@ -82,9 +82,13 @@ function PostCard(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Typography variant="body2" color="text.secondary" onClick={handleExpandClick}>
+        <Button
+          size="small"
+          onClick={handleExpandClick}
+          sx={{ cursor: 'pointer' }}
+        >
           {post.answers} Answers
-        </Typography>
+        </Button>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

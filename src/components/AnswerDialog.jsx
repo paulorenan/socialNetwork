@@ -102,7 +102,7 @@ export default function ScrollDialog(props) {
       {auth &&
         <Paper
           component="form"
-          sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%' }}
+          sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%', borderTop: '1px solid #e0e0e0' }}
           onSubmit={handleSubmit}
         >
           <InputBase
