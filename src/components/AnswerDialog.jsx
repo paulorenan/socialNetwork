@@ -103,9 +103,11 @@ export default function ScrollDialog(props) {
       >
         <DialogContent dividers={scroll === 'paper'}>
           <CardForAnswer post={post} />
-          <Typography gutterBottom>
-            Answers:
-          </Typography>
+          {answers.length > 0 && 
+            <Typography>
+              Comments:
+            </Typography>
+          }
           {answers.map(answer => (
             <CardForAnswer key={answer.id} post={answer} />
           ))}

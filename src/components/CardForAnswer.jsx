@@ -38,8 +38,13 @@ export default function CardForAnswer(props) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={post.User.name}
-        subheader={isMoment(post.createdAt).fromNow()}
+        title={
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ fontWeight: 'bold' }}>{post.User.name}</Box>
+            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
+          </Box>
+        } 
+        subheader={`@${post.User.nickName}`}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
