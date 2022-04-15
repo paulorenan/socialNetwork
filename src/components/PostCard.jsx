@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -19,6 +20,8 @@ import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
 import isMoment from 'moment';
 import AnswerDialog from './AnswerDialog'
+import MyContext from '../Context'
+import axios from 'axios'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -33,16 +36,56 @@ const ExpandMore = styled((props) => {
 
 function PostCard(props) {
   const { post } = props
+  const { user, auth, token, URL } = React.useContext(MyContext)
   const [expanded, setExpanded] = React.useState(false);
+  const [like, setLike] = React.useState(false)
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  useEffect(() => {
+    if (user) {
+      if (post.likes.find(like => like.userId === user.id)) {
+        setLike(true)
+      }
+    }
+  }, [user, post]);
+
+  const handleLike = () => {
+    if (auth) {
+      if (like) {
+        axios.defaults.headers.common['Authorization'] = token;
+        axios.delete(`${URL}likes/${post.id}`, {
+          postId: post.id,
+        })
+          .then(res => {
+            setLike(false)
+          })
+          .catch(err => {
+            console.log(err.response)
+          })
+      } else {
+        axios.defaults.headers.common['Authorization'] = token;
+        axios.post(`${URL}likes`, {
+          postId: post.id,
+        })
+          .then(res => {
+            setLike(true)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+    } else {
+      alert('Você precisa estar logado para curtir um post')
+    }
+  }
+
   const navigate = useNavigate()
 
   return (
-    <Card sx={{ maxWidth: 350, minWidth: 350, margin: 1 }}>
+    <Card sx={{ maxWidth: 450, width:'80%', minWidth: 330, margin: 1 }}>
       <CardHeader
         avatar={
           <Avatar 
@@ -82,10 +125,14 @@ function PostCard(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
+        <Button onClick={handleLike} disabled={!auth}>
+          {post.likes.length} {post.likes.length === 1 ? 'like' : 'likes'}
+          { like ? <FavoriteIcon sx={{ color: 'red', marginLeft: 1}}/> : <FavoriteBorderIcon sx={{ color: 'red', marginLeft: 1}}/> }
+        </Button>
         <Button
           size="small"
           onClick={handleExpandClick}
-          sx={{ cursor: 'pointer' }}
+          sx={{ cursor: 'pointer', mx: 'auto' }}
         >
           {post.answers === 1 ? `${post.answers} Comment` : `${post.answers} Comments`}
         </Button>

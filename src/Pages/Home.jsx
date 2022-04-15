@@ -28,7 +28,9 @@ function Home() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          width: '100%',
           minHeight: '100vh',
+          background: 'linear-gradient(to right, #67b26f, #4ca2cd)',
         }}
       >
         {auth ? <WritePost /> : <NotLogged />}

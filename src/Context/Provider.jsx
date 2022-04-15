@@ -9,6 +9,7 @@ function Provider({children}) {
   const [auth, setAuth] = useState(false)
   const [posts, setPosts] = useState([])
   const navigate = useNavigate()
+  // const URL = 'http://localhost:5432/api/'
   const URL = 'https://the-social-back.herokuapp.com/api/'
 
   useEffect(() => {

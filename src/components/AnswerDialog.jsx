@@ -50,7 +50,6 @@ export default function ScrollDialog(props) {
     if (expanded) {
     axios.get(`${URL}answers/${post.id}`)
       .then(res => {
-        console.log(res.data)
         setAnswers(res.data)
       })
     }
