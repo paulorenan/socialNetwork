@@ -48,9 +48,9 @@ function PostCard(props) {
           <Avatar 
             sx={{ bgcolor: red[500], cursor: 'pointer' }}
             aria-label="recipe"
-            onClick={() => navigate(`/p/${post.User.nickName}`)}
+            onClick={() => navigate(`/p/${post.user.nickName}`)}
           >
-            {post.User.image ? <img src={post.User.image} alt="user" /> : post.User.name[0]}
+            {post.user.image ? <img src={post.user.image} alt="user" /> : post.user.name[0]}
           </Avatar>
         }
         action={
@@ -61,18 +61,18 @@ function PostCard(props) {
         title={
           <Box
             sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-            onClick={() => navigate(`/p/${post.User.nickName}`)}
+            onClick={() => navigate(`/p/${post.user.nickName}`)}
           >
-            <Box sx={{ fontWeight: 'bold' }}>{post.User.name}</Box>
+            <Box sx={{ fontWeight: 'bold' }}>{post.user.name}</Box>
             <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
           </Box>
         } 
         subheader={
             <Box
-              onClick={() => navigate(`/p/${post.User.nickName}`)}
+              onClick={() => navigate(`/p/${post.user.nickName}`)}
               sx={{ cursor: 'pointer' }}
               >
-                @{post.User.nickName}
+                @{post.user.nickName}
             </Box>
         }
       />

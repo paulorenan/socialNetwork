@@ -32,7 +32,7 @@ export default function CardForAnswer(props) {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {post.User.image ? <img src={post.User.image} alt="user" /> : post.User.name[0]}
+            {post.user.image ? <img src={post.user.image} alt="user" /> : post.user.name[0]}
           </Avatar>
         }
         action={
@@ -42,7 +42,7 @@ export default function CardForAnswer(props) {
         }
         title={
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ fontWeight: 'bold' }}>{post.User.name}</Box>
+            <Box sx={{ fontWeight: 'bold' }}>{post.user.name}</Box>
             <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
           </Box>
         } 
