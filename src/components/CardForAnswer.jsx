@@ -25,6 +25,7 @@ import isMoment from 'moment';
 
 export default function CardForAnswer(props) {
   const { post } = props;
+  console.log(post)
   return (
     <Box 
       sx={{ maxWidth: 600, minWidth: 350, borderTop: '1px solid #e0e0e0', margin: 1 }}
@@ -46,7 +47,7 @@ export default function CardForAnswer(props) {
             <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
           </Box>
         } 
-        subheader={`@${post.User.nickName}`}
+        subheader={`@${post.user.nickName}`}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
