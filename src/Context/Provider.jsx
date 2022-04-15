@@ -49,6 +49,12 @@ function Provider({children}) {
     }
   }, [token])
 
+  useEffect(() => {
+    if (auth) {
+      axios.defaults.headers.common['Authorization'] = token;
+    }
+  }, [auth, token]);
+
   const handleLogin = (token, user) => {
     localStorage.setItem('token', token)
     localStorage.setItem('user', JSON.stringify(user))
@@ -86,7 +92,8 @@ function Provider({children}) {
     setPosts,
     loginError,
     fetchPosts,
-    logout
+    logout,
+    axios,
   };
 
   return (

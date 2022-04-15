@@ -1,50 +1,18 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { styled } from '@mui/material/styles';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, TextField } from '@mui/material';
-import isMoment from 'moment';
 import CardForAnswer from './CardForAnswer';
-import axios from 'axios';
 import MyContext from '../Context';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import DirectionsIcon from '@mui/icons-material/Directions';
 import SendIcon from '@mui/icons-material/Send';
 
 export default function ScrollDialog(props) {
-  const [open, setOpen] = React.useState(false);
-  const [scroll, setScroll] = React.useState('paper');
   const [answers, setAnswers] = React.useState([]);
   const [answer, setAnswer] = React.useState('');
-  const { URL, auth, token } = React.useContext(MyContext);
+  const { URL, auth, token, axios } = React.useContext(MyContext);
   const { post, expanded } = props
 
-  const handleClickOpen = (scrollType) => () => {
-    setOpen(true);
-    setScroll(scrollType);
-  };
 
   React.useEffect(() => {
     if (expanded) {
@@ -53,21 +21,7 @@ export default function ScrollDialog(props) {
         setAnswers(res.data)
       })
     }
-  }, [post.id, URL, expanded])
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const descriptionElementRef = React.useRef(null);
-  React.useEffect(() => {
-    if (open) {
-      const { current: descriptionElement } = descriptionElementRef;
-      if (descriptionElement !== null) {
-        descriptionElement.focus();
-      }
-    }
-  }, [open]);
+  }, [post.id, URL, expanded, axios])
 
   const handleSubmit = (event) => {
     event.preventDefault();

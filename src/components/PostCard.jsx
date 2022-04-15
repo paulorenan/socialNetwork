@@ -3,17 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
@@ -21,7 +18,6 @@ import { Box } from '@mui/material';
 import isMoment from 'moment';
 import AnswerDialog from './AnswerDialog'
 import MyContext from '../Context'
-import axios from 'axios'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -36,7 +32,7 @@ const ExpandMore = styled((props) => {
 
 function PostCard(props) {
   const { post } = props
-  const { user, auth, token, URL } = React.useContext(MyContext)
+  const { user, auth, URL, axios } = React.useContext(MyContext)
   const [expanded, setExpanded] = React.useState(false);
   const [like, setLike] = React.useState(false)
 
@@ -55,7 +51,6 @@ function PostCard(props) {
   const handleLike = () => {
     if (auth) {
       if (like) {
-        axios.defaults.headers.common['Authorization'] = token;
         axios.delete(`${URL}likes/${post.id}`, {
           postId: post.id,
         })
@@ -66,7 +61,6 @@ function PostCard(props) {
             console.log(err.response)
           })
       } else {
-        axios.defaults.headers.common['Authorization'] = token;
         axios.post(`${URL}likes`, {
           postId: post.id,
         })
