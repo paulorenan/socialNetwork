@@ -48,7 +48,7 @@ export default function CardForAnswer(props) {
         subheader={`@${post.user.nickName}`}
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.primary">
           {post.content}
         </Typography>
       </CardContent>

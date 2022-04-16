@@ -19,12 +19,9 @@ function Provider({children}) {
       setToken(storageToken)
       setUser(JSON.parse(storageUser))
     }
+    fetchPosts()
   }
   , [])
-
-  useEffect(() => {
-    fetchPosts()
-  }, [])
 
   async function fetchPosts() {
     const res = await axios.get(`${URL}posts`)
@@ -92,8 +89,8 @@ function Provider({children}) {
     setPosts,
     loginError,
     fetchPosts,
-    logout,
     axios,
+    logout,
   };
 
   return (

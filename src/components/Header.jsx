@@ -116,7 +116,7 @@ const Header = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Carlos"/>
               </IconButton>
             </Tooltip>
             <Menu
@@ -135,9 +135,9 @@ const Header = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-                <MenuItem  onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center" onClick={logout}>Logout</Typography>
-                </MenuItem>
+              <MenuItem  onClick={handleCloseUserMenu}>
+                <Typography textAlign="center" onClick={logout}>Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

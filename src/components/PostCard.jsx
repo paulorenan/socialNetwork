@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles';
-import {Card, CardHeader, CardContent, CardActions, Box, IconButton,Typography, Button } from '@mui/material';
+import {Card, CardHeader, CardContent, CardActions, Box, IconButton,Typography, Button, Menu, MenuItem } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -10,8 +10,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import LoadingButton from '@mui/lab/LoadingButton';
 import isMoment from 'moment';
-import AnswerDialog from './AnswerDialog'
-import MyContext from '../Context'
+import AnswerDialog from './AnswerDialog';
+import MyContext from '../Context';
+import EditPost from './EditPost';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -32,6 +33,23 @@ function PostCard(props) {
   const [showMore, setShowMore] = useState(false)
   const [numberComments, setNumberComments] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -73,11 +91,12 @@ function PostCard(props) {
   }, [URL, axios, post.id])
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       axios.get(`${URL}answers/count/${post.id}`).then(res => {
         setNumberComments(res.data)
       })
     }, 5000)
+    return () => clearInterval(interval)
   }, [URL, axios, post.id])
 
 
@@ -99,7 +118,27 @@ function PostCard(props) {
         action={
           showMore &&
           <IconButton aria-label="settings">
-            <MoreVertIcon />
+            <MoreVertIcon onClick={handleOpenUserMenu}/>
+            <Menu
+              sx={{ mt: '25px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem  onClick={handleCloseUserMenu}>
+                <EditPost post={post} />
+              </MenuItem>
+            </Menu>
           </IconButton>
         }
         title={
@@ -109,6 +148,14 @@ function PostCard(props) {
           >
             <Box sx={{ fontWeight: 'bold' }}>{post.user.name}</Box>
             <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
+            {(post.createdAt !== post.updatedAt) && 
+            <Typography
+              variant="caption"
+              sx={{ ml: 'auto', fontSize: '0.8rem' }}
+              color="textSecondary"
+            >
+              (edit)
+            </Typography> }
           </Box>
         } 
         subheader={
@@ -121,7 +168,7 @@ function PostCard(props) {
         }
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.primary">
           {post.content}
         </Typography>
       </CardContent>

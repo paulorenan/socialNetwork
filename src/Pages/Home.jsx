@@ -5,18 +5,22 @@ import MyContext from '../Context';
 import PostCard from '../components/PostCard'
 import NotLogged from '../components/NotLogged'
 import WritePost from '../components/WritePost'
+import axios from 'axios';
 
 function Home() {
-  const { posts, auth, setPosts, URL, axios } = useContext(MyContext)
+  const { posts, auth, URL, setPosts} = useContext(MyContext)
 
   useEffect(() => {
-    setInterval(() => {
+    const inter = setInterval(() => {
       axios.get(`${URL}posts`)
         .then(res => {
-          setPosts(res.data)
+          setPosts(res.data)  
         })
     }, 5000)
-  }, [setPosts, URL, axios])
+    return () => {
+      clearInterval(inter)
+    }
+  }, [URL, setPosts])
 
   return (
     <div>
