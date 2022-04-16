@@ -3,10 +3,10 @@ import { Typography, DialogActions, DialogContent, DialogTitle, Dialog, DialogCo
 import LoadingButton from '@mui/lab/LoadingButton';
 import MyContext from '../Context';
 
-export default function DeletePost({post, click, comment}) {
+export default function DeleteAnswer({ answer, click, fetch }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { URL, axios, fetchPosts } = useContext(MyContext);
+  const { URL, axios } = useContext(MyContext);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -18,10 +18,10 @@ export default function DeletePost({post, click, comment}) {
 
   const handleDelete = () => {
     setLoading(true);
-    axios.delete(`${URL}posts/${post.id}`)
+    axios.delete(`${URL}answers/${answer.id}`)
       .then(() => {
+        fetch();
         setLoading(false);
-        fetchPosts();
         setOpen(false);
       }).catch(() => {
         setLoading(false);
@@ -35,7 +35,7 @@ export default function DeletePost({post, click, comment}) {
         click();
       }}>
         <Typography>
-          Delete Post
+          Delete Comment
         </Typography>
       </MenuItem>
       <Dialog 
@@ -44,13 +44,13 @@ export default function DeletePost({post, click, comment}) {
         fullWidth={true}
         maxWidth="sm"
       >
-        <DialogTitle>Delete Post</DialogTitle>
+        <DialogTitle>Delete Comment</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this post?
+            Are you sure you want to delete this comment?
           </DialogContentText>
           <Typography>
-          {post.content} <br/> With {post.likes.length} likes and {comment} comments
+          {answer.content}
           </Typography>
         </DialogContent>
         <DialogActions>

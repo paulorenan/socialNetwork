@@ -23,6 +23,12 @@ export default function ScrollDialog(props) {
     }
   }, [post.id, URL, expanded, axios])
 
+  const fetchAnswers = () => {
+    axios.get(`${URL}answers/${post.id}`)
+      .then(res => { setAnswers(res.data) })
+  }
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     axios.defaults.headers.common['Authorization'] = token;
@@ -50,7 +56,7 @@ export default function ScrollDialog(props) {
   return (
     <Collapse in={expanded} timeout="auto" unmountOnExit>
       {answers.map(answer => (
-        <CardForAnswer key={answer.id} post={answer} />
+        <CardForAnswer key={answer.id} post={answer} fetch={fetchAnswers} />
       ))}
       {auth &&
         <Paper

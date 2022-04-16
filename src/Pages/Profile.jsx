@@ -7,7 +7,7 @@ import Header from '../components/Header'
 function Profile() {
   const { nickname } = useParams()
   const [user, setUser] = useState(null)
-  const [posts, setPosts] = useState([])
+  // const [posts, setPosts] = useState([])
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const {URL} = useContext(MyContext)

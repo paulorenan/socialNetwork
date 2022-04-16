@@ -3,11 +3,11 @@ import { DialogActions, DialogContent, DialogTitle, Dialog, TextField, MenuItem,
 import LoadingButton from '@mui/lab/LoadingButton';
 import MyContext from '../Context';
 
-export default function EditPost({post, click}) {
+export default function EditAnswer({answer, click, fetch}) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
-  const { URL, axios, fetchPosts } = useContext(MyContext);
+  const { URL, axios } = useContext(MyContext);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -18,20 +18,20 @@ export default function EditPost({post, click}) {
   };
 
   useEffect(() => {
-    if (post) {
+    if (answer) {
       if (!open) {
-        setContent(post.content);
+        setContent(answer.content);
       }
     }
-  }, [post, open]);
+  }, [answer, open]);
 
   const handleEdit = () => {
     if (content.trim() !== '') {
       setLoading(true);
-      axios.put(`${URL}posts/${post.id}`, { content })
+      axios.put(`${URL}answers/${answer.id}`, { content })
         .then(() => {
+          fetch();
           setLoading(false);
-          fetchPosts();
           setOpen(false);
         }).catch(() => {
           setLoading(false);
@@ -46,7 +46,7 @@ export default function EditPost({post, click}) {
         click();
       }}>
         <Typography>
-          Edit Post
+          Edit Comment
         </Typography>
       </MenuItem>
       <Dialog 
@@ -55,12 +55,12 @@ export default function EditPost({post, click}) {
         fullWidth={true}
         maxWidth="sm"
       >
-        <DialogTitle>Edit Post</DialogTitle>
+        <DialogTitle>Edit Comment</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label="Post"
+            label="Comment"
             type="text"
             fullWidth
             value={content}

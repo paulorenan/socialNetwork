@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles';
-import {Card, CardHeader, CardContent, CardActions, Box, IconButton,Typography, Button, Menu, MenuItem } from '@mui/material';
+import {Card, CardHeader, CardContent, CardActions, Box, IconButton,Typography, Button, Menu } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -34,18 +34,11 @@ function PostCard(props) {
   const [showMore, setShowMore] = useState(false)
   const [numberComments, setNumberComments] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate()
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
@@ -100,10 +93,6 @@ function PostCard(props) {
     return () => clearInterval(interval)
   }, [URL, axios, post.id])
 
-
-
-  const navigate = useNavigate()
-
   return (
     <Card sx={{ maxWidth: 450, width:'80%', minWidth: 330, margin: 1 }}>
       <CardHeader
@@ -118,8 +107,10 @@ function PostCard(props) {
         }
         action={
           showMore &&
-          <IconButton aria-label="settings">
-            <MoreVertIcon onClick={handleOpenUserMenu}/>
+          <>
+            <IconButton aria-label="settings"  onClick={handleOpenUserMenu}>
+              <MoreVertIcon/>
+            </IconButton>
             <Menu
               sx={{ mt: '35px' }}
               id="menu-appbar"
@@ -136,14 +127,10 @@ function PostCard(props) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem  onClick={handleCloseUserMenu}>
-                <EditPost post={post} />
-              </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <DeletePost post={post} comment={numberComments}/>
-              </MenuItem>
+              <EditPost post={post} click={handleCloseUserMenu}/>
+              <DeletePost post={post} click={handleCloseUserMenu} comment={numberComments}/>
             </Menu>
-          </IconButton>
+          </>
         }
         title={
           <Box sx={{ display: 'flex', alignItems: 'center' }}>

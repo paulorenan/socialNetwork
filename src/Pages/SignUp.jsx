@@ -32,13 +32,10 @@ export default function SignUp() {
   const [nickName, setNickName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
   const { handleLogin, loginError, URL, axios } = useContext(MyContext)
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setLoading(true)
     axios.post(`${URL}users`, {
       name,
       nickName,
@@ -46,12 +43,8 @@ export default function SignUp() {
       password
     }).then(res => {
       handleLogin(res.data.token, res.data.user);
-      setLoading(false)
-      console.log(res);
     }).catch(err => {
       loginError();
-      setLoading(false)
-      console.log(err.response.data);
     });
   };
 

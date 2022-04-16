@@ -22,23 +22,18 @@ const theme = createTheme();
 function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
   const { URL, handleLogin, loginError, axios } = useContext(MyContext)
 
   const login = (event) => {
     event.preventDefault();
-    setLoading(true);
     axios.post(`${URL}login`, {
       email,
       password
     })
     .then(res => {
       handleLogin(res.data.token, res.data.user);
-      setLoading(false);
     }).catch(err => {
       loginError();
-      setLoading(false);
     });
   };
 

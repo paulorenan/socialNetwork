@@ -1,19 +1,28 @@
 import * as React from 'react';
-import CardHeader from '@mui/material/CardHeader';
-import CardContent from '@mui/material/CardContent';
-import Avatar from '@mui/material/Avatar';
+import { useNavigate } from 'react-router-dom';
+import {Menu, CardHeader, CardContent,Avatar, Box } from '@mui/material/';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box } from '@mui/material';
 import isMoment from 'moment';
 import MyContext from '../Context';
+import EditAnswer from './EditAnswer';
+import DeleteAnswer from './DeleteAnswer';
 
-export default function CardForAnswer(props) {
-  const { post } = props;
+export default function CardForAnswer({ post, fetch }) {
   const [ showMore, setShowMore ]  = React.useState(false);
   const { user, auth } = React.useContext(MyContext);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate()
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
   
   React.useEffect(() => {
     if (auth) {
@@ -29,23 +38,70 @@ export default function CardForAnswer(props) {
     >
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Avatar
+            sx={{ bgcolor: red[500], cursor: 'pointer' }}
+            aria-label="user"
+            onClick={() => navigate(`/p/${post.user.nickName}`)}
+          >
             {post.user.image ? <img src={post.user.image} alt="user" /> : post.user.name[0]}
           </Avatar>
         }
         action={
           showMore &&
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
+          <>
+            <IconButton aria-label="settings" onClick={handleOpenUserMenu}>
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              sx={{ mt: '35px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <EditAnswer answer={post} click={handleCloseUserMenu} fetch={fetch}/>
+              <DeleteAnswer answer={post} click={handleCloseUserMenu} fetch={fetch}/>
+            </Menu>
+          </>
         }
         title={
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ fontWeight: 'bold' }}>{post.user.name}</Box>
+            <Box
+              sx={{ fontWeight: 'bold', cursor: 'pointer' }}
+              onClick={() => navigate(`/p/${post.user.nickName}`)}
+            >
+              {post.user.name}
+            </Box>
             <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
           </Box>
         } 
-        subheader={`@${post.user.nickName}`}
+        subheader={
+          <Box sx={{ display: 'flex', alignItems: 'center' }} >
+            <Box
+            sx={{ cursor: 'pointer' }}
+            onClick={() => navigate(`/p/${post.user.nickName}`)}
+            >
+              @{post.user.nickName}
+            </Box>
+            {(post.createdAt !== post.updatedAt) && 
+            <Typography
+              variant="caption"
+              sx={{ ml: 'auto', fontSize: '0.8rem' }}
+              color="textSecondary"
+            >
+              (edit)
+            </Typography> }
+          </Box>
+      }
       />
       <CardContent>
         <Typography variant="body2" color="text.primary">

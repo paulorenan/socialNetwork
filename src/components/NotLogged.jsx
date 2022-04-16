@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Container, Box } from '@mui/material'
+import { Button, Box } from '@mui/material'
 
 function NotLogged() {
   let navigate = useNavigate()
