@@ -8,9 +8,21 @@ import { red } from '@mui/material/colors';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box } from '@mui/material';
 import isMoment from 'moment';
+import MyContext from '../Context';
 
 export default function CardForAnswer(props) {
   const { post } = props;
+  const [ showMore, setShowMore ]  = React.useState(false);
+  const { user, auth } = React.useContext(MyContext);
+  
+  React.useEffect(() => {
+    if (auth) {
+      if (post.userId === user.id) {
+        setShowMore(true)
+      }
+    }
+  }, [user, post, auth]);
+
   return (
     <Box 
       sx={{ maxWidth: 600, minWidth: 330, borderTop: '1px solid #e0e0e0', margin: 1 }}
@@ -22,6 +34,7 @@ export default function CardForAnswer(props) {
           </Avatar>
         }
         action={
+          showMore &&
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>

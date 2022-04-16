@@ -35,6 +35,7 @@ function PostCard(props) {
   const { user, auth, URL, axios } = React.useContext(MyContext)
   const [expanded, setExpanded] = React.useState(false);
   const [like, setLike] = React.useState(false)
+  const [showMore, setShowMore] = React.useState(false)
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -51,30 +52,22 @@ function PostCard(props) {
   const handleLike = () => {
     if (auth) {
       if (like) {
-        axios.delete(`${URL}likes/${post.id}`, {
-          postId: post.id,
-        })
-          .then(res => {
-            setLike(false)
-          })
-          .catch(err => {
-            console.log(err.response)
-          })
+        axios.delete(`${URL}likes/${post.id}`, { postId: post.id }).then(() => { setLike(false) })
       } else {
-        axios.post(`${URL}likes`, {
-          postId: post.id,
-        })
-          .then(res => {
-            setLike(true)
-          })
-          .catch(err => {
-            console.log(err)
-          })
+        axios.post(`${URL}likes`, { postId: post.id }).then(() => { setLike(true) })
       }
     } else {
       alert('Você precisa estar logado para curtir um post')
     }
   }
+
+  useEffect(() => {
+    if (auth) {
+      if (post.userId === user.id) {
+        setShowMore(true)
+      }
+    }
+  }, [user, post, auth])
 
   const navigate = useNavigate()
 
@@ -91,6 +84,7 @@ function PostCard(props) {
           </Avatar>
         }
         action={
+          showMore &&
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>
