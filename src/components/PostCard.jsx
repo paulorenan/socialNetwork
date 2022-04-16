@@ -1,20 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
+import {Card, CardHeader, CardContent, CardActions, Box, IconButton,Typography, Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Button from '@mui/material/Button';
-import { Box } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import isMoment from 'moment';
 import AnswerDialog from './AnswerDialog'
 import MyContext from '../Context'
@@ -32,10 +26,12 @@ const ExpandMore = styled((props) => {
 
 function PostCard(props) {
   const { post } = props
-  const { user, auth, URL, axios } = React.useContext(MyContext)
-  const [expanded, setExpanded] = React.useState(false);
-  const [like, setLike] = React.useState(false)
-  const [showMore, setShowMore] = React.useState(false)
+  const { user, auth, URL, axios } = useContext(MyContext)
+  const [expanded, setExpanded] = useState(false);
+  const [like, setLike] = useState(false)
+  const [showMore, setShowMore] = useState(false)
+  const [numberComments, setNumberComments] = useState(0)
+  const [loading, setLoading] = useState(true)
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -68,6 +64,23 @@ function PostCard(props) {
       }
     }
   }, [user, post, auth])
+
+  useEffect(() => {
+    axios.get(`${URL}answers/count/${post.id}`).then(res => {
+      setNumberComments(res.data)
+      setLoading(false)
+    })
+  }, [URL, axios, post.id])
+
+  useEffect(() => {
+    setInterval(() => {
+      axios.get(`${URL}answers/count/${post.id}`).then(res => {
+        setNumberComments(res.data)
+      })
+    }, 5000)
+  }, [URL, axios, post.id])
+
+
 
   const navigate = useNavigate()
 
@@ -117,13 +130,14 @@ function PostCard(props) {
           {post.likes.length} {post.likes.length === 1 ? 'like' : 'likes'}
           { like ? <FavoriteIcon sx={{ color: 'red', marginLeft: 1}}/> : <FavoriteBorderIcon sx={{ color: 'red', marginLeft: 1}}/> }
         </Button>
-        <Button
+        <LoadingButton
           size="small"
           onClick={handleExpandClick}
           sx={{ cursor: 'pointer', mx: 'auto' }}
+          loading={loading}
         >
-          {post.answers === 1 ? `${post.answers} Comment` : `${post.answers} Comments`}
-        </Button>
+          {numberComments === 1 ? `${numberComments} Comment` : `${numberComments} Comments`}
+        </LoadingButton>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
