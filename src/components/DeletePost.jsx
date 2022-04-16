@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Typography, DialogActions, DialogContent, DialogTitle, Dialog, TextField } from '@mui/material';
+import { Typography, DialogActions, DialogContent, DialogTitle, Dialog, DialogContentText } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MyContext from '../Context';
 
-export default function EditPost({post}) {
+export default function DeletePost({post, comment}) {
   const [open, setOpen] = useState(false);
-  const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const { URL, axios, fetchPosts } = useContext(MyContext);
 
@@ -17,18 +16,9 @@ export default function EditPost({post}) {
     setOpen(false);
   };
 
-  useEffect(() => {
-    if (post) {
-      if (!open) {
-        setContent(post.content);
-      }
-    }
-  }, [post, open]);
-
-  const handleEdit = () => {
-    if (content.trim() !== '') {
+  const handleDelete = () => {
       setLoading(true);
-      axios.put(`${URL}posts/${post.id}`, { content })
+      axios.delete(`${URL}posts/${post.id}`)
         .then(() => {
           setLoading(false);
           fetchPosts();
@@ -36,13 +26,12 @@ export default function EditPost({post}) {
         }).catch(() => {
           setLoading(false);
         });
-    }
   };
 
   return (
     <div>
       <Typography textAlign="center" onClick={handleClickOpen}>
-        Edit
+        Delete
       </Typography>
       <Dialog 
         open={open}
@@ -50,22 +39,18 @@ export default function EditPost({post}) {
         fullWidth={true}
         maxWidth="sm"
       >
-        <DialogTitle>Edit Post</DialogTitle>
+        <DialogTitle>Delete Post</DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Post"
-            type="text"
-            fullWidth
-            // variant="standard"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+          <DialogContentText>
+            Are you sure you want to delete this post?
+          </DialogContentText>
+          <Typography>
+          {post.content} <br/> With {post.likes.length} likes and {comment} comments
+          </Typography>
         </DialogContent>
         <DialogActions>
           <LoadingButton loading={loading} onClick={handleClose}>Cancel</LoadingButton>
-          <LoadingButton loading={loading} onClick={handleEdit}>Edit</LoadingButton>
+          <LoadingButton loading={loading} onClick={handleDelete}>Delete</LoadingButton>
         </DialogActions>
       </Dialog>
     </div>

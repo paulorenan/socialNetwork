@@ -13,6 +13,7 @@ import isMoment from 'moment';
 import AnswerDialog from './AnswerDialog';
 import MyContext from '../Context';
 import EditPost from './EditPost';
+import DeletePost from './DeletePost';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -120,7 +121,7 @@ function PostCard(props) {
           <IconButton aria-label="settings">
             <MoreVertIcon onClick={handleOpenUserMenu}/>
             <Menu
-              sx={{ mt: '25px' }}
+              sx={{ mt: '35px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -138,32 +139,39 @@ function PostCard(props) {
               <MenuItem  onClick={handleCloseUserMenu}>
                 <EditPost post={post} />
               </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <DeletePost post={post} comment={numberComments}/>
+              </MenuItem>
             </Menu>
           </IconButton>
         }
         title={
-          <Box
-            sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-            onClick={() => navigate(`/p/${post.user.nickName}`)}
-          >
-            <Box sx={{ fontWeight: 'bold' }}>{post.user.name}</Box>
-            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
-            {(post.createdAt !== post.updatedAt) && 
-            <Typography
-              variant="caption"
-              sx={{ ml: 'auto', fontSize: '0.8rem' }}
-              color="textSecondary"
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box
+              sx={{ fontWeight: 'bold', cursor: 'pointer' }}
+              onClick={() => navigate(`/p/${post.user.nickName}`)}
             >
-              (edit)
-            </Typography> }
+              {post.user.name}
+            </Box>
+            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
           </Box>
         } 
         subheader={
-            <Box
-              onClick={() => navigate(`/p/${post.user.nickName}`)}
+            <Box sx={{ display: 'flex', alignItems: 'center' }} >
+              <Box
               sx={{ cursor: 'pointer' }}
+              onClick={() => navigate(`/p/${post.user.nickName}`)}
               >
                 @{post.user.nickName}
+              </Box>
+              {(post.createdAt !== post.updatedAt) && 
+              <Typography
+                variant="caption"
+                sx={{ ml: 'auto', fontSize: '0.8rem' }}
+                color="textSecondary"
+              >
+                (edit)
+              </Typography> }
             </Box>
         }
       />
