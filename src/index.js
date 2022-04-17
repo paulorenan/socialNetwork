@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.querySelector("#root")).render(
     <BrowserRouter>
       <StyledEngineProvider injectFirst>
         <Provider>
-          <App />
+            <App />
         </Provider>
       </StyledEngineProvider>
     </BrowserRouter>

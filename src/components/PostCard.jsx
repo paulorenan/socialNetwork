@@ -14,6 +14,7 @@ import AnswerDialog from './AnswerDialog';
 import MyContext from '../Context';
 import EditPost from './EditPost';
 import DeletePost from './DeletePost';
+import ReactMarkdown from 'react-markdown'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -164,9 +165,9 @@ function PostCard(props) {
         }
       />
       <CardContent>
-        <Typography variant="body2" color="text.primary">
+        <ReactMarkdown>
           {post.content}
-        </Typography>
+        </ReactMarkdown>
       </CardContent>
       <CardActions disableSpacing>
         <Button onClick={handleLike} disabled={!auth}>
