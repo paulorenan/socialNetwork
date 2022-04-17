@@ -9,6 +9,7 @@ import isMoment from 'moment';
 import MyContext from '../Context';
 import EditAnswer from './EditAnswer';
 import DeleteAnswer from './DeleteAnswer';
+import ReactMarkdown from 'react-markdown';
 
 export default function CardForAnswer({ post, fetch }) {
   const [ showMore, setShowMore ]  = React.useState(false);
@@ -105,9 +106,9 @@ export default function CardForAnswer({ post, fetch }) {
       }
       />
       <CardContent>
-        <Typography variant="body2" color="text.primary">
+        <ReactMarkdown>
           {post.content}
-        </Typography>
+        </ReactMarkdown>
       </CardContent>
     </Box>
   )
