@@ -99,10 +99,11 @@ function PostCard(props) {
         avatar={
           <Avatar 
             sx={{ bgcolor: red[500], cursor: 'pointer' }}
-            aria-label="recipe"
+            aria-label="user"
             onClick={() => navigate(`/p/${post.user.nickName}`)}
+            src={post.user.image}
           >
-            {post.user.image ? <img src={post.user.image} alt="user" /> : post.user.name[0]}
+            {post.user.name[0].toUpperCase()}
           </Avatar>
         }
         action={
