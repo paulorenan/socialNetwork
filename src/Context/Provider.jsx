@@ -36,6 +36,8 @@ function Provider({children}) {
         const load1 = await axios.post(`${URL}load`);
         if(load1.status === 200){
           setAuth(true);
+          localStorage.setItem('user', JSON.stringify(load1.data.user));
+          setUser(load1.data.user);
         }
       }catch(err){
         setAuth(false);

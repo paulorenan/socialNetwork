@@ -125,7 +125,7 @@ const HeaderAuth = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Carlos"/>
+                <Avatar alt="user" src={user.image}/>
               </IconButton>
             </Tooltip>
             <Menu
