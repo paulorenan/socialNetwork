@@ -165,7 +165,7 @@ function PostCard(props) {
         }
       />
       <CardContent>
-        <ReactMarkdown>
+        <ReactMarkdown className="mark">
           {post.content}
         </ReactMarkdown>
       </CardContent>
