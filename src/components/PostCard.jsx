@@ -15,6 +15,7 @@ import MyContext from '../Context';
 import EditPost from './EditPost';
 import DeletePost from './DeletePost';
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -165,7 +166,7 @@ function PostCard(props) {
         }
       />
       <CardContent>
-        <ReactMarkdown className="mark">
+        <ReactMarkdown className="mark" remarkPlugins={[remarkGfm]}>
           {post.content}
         </ReactMarkdown>
       </CardContent>

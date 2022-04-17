@@ -10,6 +10,7 @@ import MyContext from '../Context';
 import EditAnswer from './EditAnswer';
 import DeleteAnswer from './DeleteAnswer';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm'
 
 export default function CardForAnswer({ post, fetch }) {
   const [ showMore, setShowMore ]  = React.useState(false);
@@ -106,7 +107,7 @@ export default function CardForAnswer({ post, fetch }) {
       }
       />
       <CardContent>
-        <ReactMarkdown>
+        <ReactMarkdown className="mark" remarkPlugins={[remarkGfm]}>
           {post.content}
         </ReactMarkdown>
       </CardContent>

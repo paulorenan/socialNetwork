@@ -76,10 +76,10 @@ export default function WritePost() {
       onSubmit={sendPost}
       >
         <TextField
-          id="outlined-multiline-static"
+          id="outlined-multiline-flexible"
           label="Tell us what are you thinking"
           multiline
-          rows={1}
+          maxRows={6}
           variant="outlined"
           fullWidth
           value={newPost}

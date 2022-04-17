@@ -59,10 +59,14 @@ export default function EditPost({post, click}) {
         <DialogContent>
           <TextField
             autoFocus
+            id="outlined-multiline-flexible"
+            multiline
+            maxRows={6}
+            variant="outlined"
+            fullWidth
             margin="dense"
             label="Post"
             type="text"
-            fullWidth
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
