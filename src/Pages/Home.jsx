@@ -6,9 +6,10 @@ import PostCard from '../components/PostCard'
 import NotLogged from '../components/NotLogged'
 import WritePost from '../components/WritePost'
 import axios from 'axios';
+import '../App.css'
 
 function Home() {
-  const { posts, auth, URL, setPosts} = useContext(MyContext)
+  const { posts, auth, URL, setPosts } = useContext(MyContext)
 
   useEffect(() => {
     const inter = setInterval(() => {
@@ -23,7 +24,7 @@ function Home() {
   }, [URL, setPosts])
 
   return (
-    <div>
+    <div className='App'>
       <Header />
       <Box
         sx={{
@@ -31,8 +32,6 @@ function Home() {
           flexDirection: 'column',
           alignItems: 'center',
           width: '100%',
-          minHeight: '100vh',
-          background: 'linear-gradient(to right, #67b26f, #4ca2cd)',
         }}
       >
         {auth ? <WritePost /> : <NotLogged />}

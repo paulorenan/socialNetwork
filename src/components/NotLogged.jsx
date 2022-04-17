@@ -10,6 +10,12 @@ function NotLogged() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+      backgroundColor: 'white',
+      width: '95%',
+      maxWidth: '500px',
+      minWidth: '300px',
+      margin: '10px',
+      borderRadius: '10px',
     }}
   >
       <h1>Not logged</h1>

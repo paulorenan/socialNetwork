@@ -5,6 +5,7 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Profile from './Pages/Profile';
 import SignUp from './Pages/SignUp';
+import './App.css';
 
 function App() {
   const { auth } = useContext(MyContext);

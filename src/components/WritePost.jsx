@@ -1,28 +1,31 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import MyContext from '../Context';
 import { Container } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import axios from 'axios';
 
 export default function WritePost() {
   const {user, token, URL, fetchPosts} = React.useContext(MyContext)
   const [newPost, setNewPost] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
 
   const sendPost = (event) => {
     event.preventDefault();
     axios.defaults.headers.common['Authorization'] = token;
     if(newPost.trim() !== '') {
+      setLoading(true)
       console.log(newPost)
       axios.post(`${URL}posts`, {
         content: newPost,
       }).then(() => {
           fetchPosts()
           setNewPost('')
+          setLoading(false)
         }).catch(err => {
-          console.log(err)
+          setLoading(false)
         })
     }
     setNewPost('')
@@ -35,6 +38,12 @@ export default function WritePost() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+      backgroundColor: 'white',
+      width: '95%',
+      maxWidth: '500px',
+      minWidth: '300px',
+      margin: '10px',
+      borderRadius: '10px',
     }}
   >
     <Container
@@ -52,7 +61,7 @@ export default function WritePost() {
           marginTop: '15px',
         }}
       >
-        Olá, {user.name}</Typography>
+        Hello, {user.name}</Typography>
       <Typography
         variant="h5"
         component="h2"
@@ -60,7 +69,7 @@ export default function WritePost() {
           marginBottom: '5px',
         }}
       >
-        Escreva seu post
+        What are you thinking?
       </Typography>
       <Box sx={{ width: '100%' }}
       component="form"
@@ -68,7 +77,7 @@ export default function WritePost() {
       >
         <TextField
           id="outlined-multiline-static"
-          label="Post"
+          label="Tell us what are you thinking"
           multiline
           rows={1}
           variant="outlined"
@@ -77,18 +86,20 @@ export default function WritePost() {
           onChange={(event) => setNewPost(event.target.value)}
         />
       </Box>
-      <Button
+      <LoadingButton
         variant="contained"
         color="primary"
         onClick={sendPost}
+        loading={loading}
         sx={{
           marginTop: '10px',
-          width: '60%',
+          alignSelf: 'center',
+          width: '50%',
           marginBottom: '10px',
         }}
       >
-        Postar
-      </Button>
+        Post
+      </LoadingButton>
       <div>
       </div>
     </Container>
