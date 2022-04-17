@@ -3,22 +3,27 @@ import { useParams } from 'react-router-dom'
 import MyContext from '../Context'
 import axios from 'axios'
 import Header from '../components/Header'
-import { Avatar, Box, Typography } from '@mui/material'
+import { Avatar, Box, Button, Typography } from '@mui/material'
 import PostCard from '../components/PostCard'
+import EditProfile from '../components/EditProfile'
 
 function Profile() {
   const { nickname } = useParams()
-  const [user, setUser] = useState(null)
+  const [userLink, setUserLink] = useState(null)
   const [posts, setPosts] = useState([])
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
-  const {URL} = useContext(MyContext)
+  const [loadCountLikes, setLoadCountLikes] = useState(false)
+  const [loadCountComments, setLoadCountComments] = useState(false)
+  const [countLikes, setCountLikes] = useState(0)
+  const [countComments, setCountComments] = useState(0)
+  const {URL, user} = useContext(MyContext)
 
   useEffect(() => {
     setLoading(true)
     axios.get(`${URL}users/${nickname}`)
       .then(res => {
-        setUser(res.data)
+        setUserLink(res.data)
         setLoading(false)
       }).catch(() => {
         setError(true)
@@ -27,8 +32,8 @@ function Profile() {
   }, [nickname, URL])
 
   useEffect(() => {
-    if (user) {
-      axios.get(`${URL}posts/user/${user.id}`)
+    if (userLink) {
+      axios.get(`${URL}posts/user/${userLink.id}`)
         .then(res => {
           setPosts(res.data)
         }).catch(() => {
@@ -36,7 +41,44 @@ function Profile() {
           setLoading(false)
         });
     }
-  }, [user, URL])
+  }, [userLink, URL])
+
+  useEffect(() => {
+    if (userLink) {
+      axios.get(`${URL}answers/user/count/${userLink.id}`)
+        .then(res => {
+          setCountComments(res.data)
+          setLoadCountComments(true)
+        }).catch(() => {
+          setError(true)
+          setLoading(false)
+        });
+    }
+  }, [userLink, URL])
+
+  useEffect(() => {
+    if (userLink) {
+      axios.get(`${URL}likes/user/count/${userLink.id}`)
+        .then(res => {
+          setCountLikes(res.data)
+          setLoadCountLikes(true)
+        }).catch(() => {
+          setError(true)
+          setLoading(false)
+        });
+    }
+  }, [userLink, URL])
+
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get(`${URL}users/${nickname}`)
+      setUserLink(res.data)
+      setLoading(false)
+    } catch (err) {
+      setError(true)
+      setLoading(false)
+    }
+  }
 
   return (
     <div className='App'>
@@ -65,7 +107,7 @@ function Profile() {
               }}
             >
               <Avatar
-                src={user.image}
+                src={userLink.image}
                 sx={{
                   width: '100px',
                   height: '100px',
@@ -86,7 +128,7 @@ function Profile() {
                     marginBottom: '0px',
                   }}
                 >
-                  {user.name}
+                  {userLink.name}
                 </Typography>
                 <Typography
                   variant="h6"
@@ -97,8 +139,27 @@ function Profile() {
                     marginBottom: '2px',
                   }}
                 >
-                  @{user.nickName}
+                  @{userLink.nickName}
                 </Typography>
+                {userLink.id === user.id ? (
+                  <EditProfile user={userLink} fetch={fetchUser} />
+                ) : null }
+                {loadCountLikes && loadCountComments ? (
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    color="textSecondary"
+                    textAlign="center"
+                    sx={{
+                      fontWeight: 'fontWeightBold',
+                      margin: '20px',
+                      marginTop: '0px',
+                      marginBottom: '10px',
+                    }}
+                    >
+                    @{userLink.nickName} has {posts.length} posts, {countComments} comments and give {countLikes} likes
+                    </Typography>
+                ) : null}
               </Box>
             </Box>
             {posts.map(post => (
