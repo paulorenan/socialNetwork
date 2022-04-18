@@ -24,5 +24,5 @@ Site de uma pequena rede social
   <img src="https://uploaddeimagens.com.br/images/003/833/062/original/Screenshot_20220417-224743_Chrome.jpg?1650247233" width="300">
   <img src="https://uploaddeimagens.com.br/images/003/833/065/original/Screenshot_20220417-224753_Chrome.jpg?1650247276" width="300">
   <img src="https://uploaddeimagens.com.br/images/003/833/066/original/Screenshot_20220417-224801_Chrome.jpg?1650247304" width="300">
-  <img src="(https://uploaddeimagens.com.br/images/003/833/067/original/Screenshot_20220417-224907_Chrome.jpg?1650247336" width="300">
+  <img src="https://uploaddeimagens.com.br/images/003/833/067/original/Screenshot_20220417-224907_Chrome.jpg?1650247336" width="300">
 </div>
