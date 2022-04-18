@@ -1,70 +1,28 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# The Social Network
 
-## Available Scripts
+Site de uma pequena rede social
 
-In the project directory, you can run:
+## WebSite
+[The Social Network](https://social-network-sooty.vercel.app/)
 
-### `npm start`
+## Stack utilizada
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Front-end:** React, React-Router, ReactMarkDown, Context, Axios, Material-UI, Moment.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Back-end:** Sequelize, NodeJs, Express, PostgreSQL, Supabase, JWT, Swagger.
 
-### `npm test`
+[Repositorio do Back-End](https://github.com/paulorenan/socialBack)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Screenshots
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<div>
+  <img src="https://uploaddeimagens.com.br/images/003/833/049/original/Screenshot_20220417-224703_Chrome.jpg?1650247073" width="300">
+  <img src="https://uploaddeimagens.com.br/images/003/833/053/original/Screenshot_20220417-224714_Chrome.jpg?1650247115" width="300">
+  <img src="https://uploaddeimagens.com.br/images/003/833/058/original/Screenshot_20220417-224728_Chrome.jpg?1650247160" width="300">
+  <img src="https://uploaddeimagens.com.br/images/003/833/060/original/Screenshot_20220417-224738_Chrome.jpg?1650247195" width="300">
+  <img src="https://uploaddeimagens.com.br/images/003/833/062/original/Screenshot_20220417-224743_Chrome.jpg?1650247233" width="300">
+  <img src="https://uploaddeimagens.com.br/images/003/833/065/original/Screenshot_20220417-224753_Chrome.jpg?1650247276" width="300">
+  <img src="https://uploaddeimagens.com.br/images/003/833/066/original/Screenshot_20220417-224801_Chrome.jpg?1650247304" width="300">
+  <img src="(https://uploaddeimagens.com.br/images/003/833/067/original/Screenshot_20220417-224907_Chrome.jpg?1650247336" width="300">
+</div>
