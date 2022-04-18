@@ -141,7 +141,7 @@ function Profile() {
                 >
                   @{userLink.nickName}
                 </Typography>
-                {userLink.id === user.id ? (
+                { user && (userLink.id === user.id) ? (
                   <EditProfile user={userLink} fetch={fetchUser} />
                 ) : null }
                 {loadCountLikes && loadCountComments ? (
