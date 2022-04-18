@@ -16,8 +16,7 @@ export default function EditProfile({user, fetch}) {
   const [image, setImage] = useState('');
   const [loading, setLoading] = useState(false);
   const [nickError, setNickError] = useState(false);
-  const [nickErrorText, setNickErrorText] = useState('Nickname cannot contain spaces');
-  const { URL, axios } = useContext(MyContext);
+  const { URL, axios, fetchLoad } = useContext(MyContext);
   const navigate = useNavigate();
 
   const handleClickOpen = () => {
@@ -43,9 +42,11 @@ export default function EditProfile({user, fetch}) {
         axios.put(`${URL}users/me`, { name, nickName, image })
           .then(() => {
             if (nickName !== user.nickName) {
+              fetchLoad();
               navigate(`/p/${nickName}`);
             } else {
             fetch();
+            fetchLoad();
             setLoading(false);
             setOpen(false);
             setNickError(false);
@@ -88,7 +89,7 @@ export default function EditProfile({user, fetch}) {
             fullWidth
             variant="standard"
             error={nickError}
-            helperText={nickError ? nickErrorText : ''}
+            helperText={nickError ? 'Nickname cannot contain spaces' : ''}
           />
           <TextField
             autoFocus

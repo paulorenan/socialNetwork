@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import MyContext from '../Context'
 import axios from 'axios'
 import Header from '../components/Header'
-import { Avatar, Box, Button, Typography } from '@mui/material'
+import { Avatar, Box, Typography } from '@mui/material'
 import PostCard from '../components/PostCard'
 import EditProfile from '../components/EditProfile'
 
