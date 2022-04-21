@@ -36,6 +36,16 @@ const HeaderAuth = () => {
     setAnchorElUser(null);
   };
 
+  const navigateHome = () => {
+    window.scrollTo(0, 0)
+    navigate('/')
+  };
+
+  const navigateProfile = () => {
+    window.scrollTo(0, 0)
+    navigate(`/p/${user.nickName}`)
+  };
+
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
@@ -86,10 +96,10 @@ const HeaderAuth = () => {
               }}
             >
             <MenuItem onClick={handleCloseNavMenu}>
-              <Typography textAlign="center" onClick={() => navigate('/')}>Home</Typography>
+              <Typography textAlign="center" onClick={navigateHome}>Home</Typography>
             </MenuItem>
             <MenuItem onClick={handleCloseNavMenu}>
-              <Typography textAlign="center" onClick={() => navigate(`/p/${user.nickName}`)}>Profile</Typography>
+              <Typography textAlign="center" onClick={navigateProfile}>Profile</Typography>
             </MenuItem>
             </Menu>
           </Box>
