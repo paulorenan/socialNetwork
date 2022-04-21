@@ -8,7 +8,6 @@ import EditProfile from '../components/EditProfile'
 import { styled } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 const Input = styled('input')({
@@ -31,24 +30,26 @@ function Profile() {
   const sendImage = async (e) => {
     e.preventDefault()
     setLoadingPhoto(true)
-    const formData = new FormData()
-    formData.append('image', e.target.files[0])
-    try {
-      const res = await fetch('https://api.imgur.com/3/image', {
-        method: 'POST',
-        headers: {
-          Authorization: `Client-ID ${CLIENT_ID}`,
-        },
-        body: formData,
-      })
-      const data = await res.json()
-      await axios.put(`${URL}users/me/image`, {
-        image: data.data.link,
-      })
-      await getUser();
-      await fetchLoad();
-    } catch (err) {
-      alert('Something went wrong')
+      if (e.target.files[0]) {
+      const formData = new FormData()
+      formData.append('image', e.target.files[0])
+      try {
+        const res = await fetch('https://api.imgur.com/3/image', {
+          method: 'POST',
+          headers: {
+            Authorization: `Client-ID ${CLIENT_ID}`,
+          },
+          body: formData,
+        })
+        const data = await res.json()
+        await axios.put(`${URL}users/me/image`, {
+          image: data.data.link,
+        })
+        await getUser();
+        await fetchLoad();
+      } catch (err) {
+        alert('Something went wrong')
+      }
     }
     setLoadingPhoto(false)
   }
