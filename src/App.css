@@ -3,16 +3,19 @@
   background: linear-gradient(to right, #67b26f, #4ca2cd);
 }
 
-.mark p{
+.mark p, code{
   margin: 0;
+  margin-left: 15px;
 }
 
 .mark img{
+  margin: 0;
   width: 100%;
   max-height: 900px;
 }
 
 .postImage{
+  margin: 0;
   width: 100%;
   max-height: 1000px;
 }

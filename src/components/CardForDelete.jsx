@@ -45,12 +45,12 @@ export default function CardForDelete({ post }) {
           </Box>
       }
       />
-      <CardContent sx={{ paddingTop: 0, paddingBottom: 0 }}>
+      <CardContent sx={{ padding: 0 }}>
         <ReactMarkdown className="mark" remarkPlugins={[remarkGfm]}>
           {post.content}
         </ReactMarkdown>
         {(post.image) &&
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 0, marginTop: '1rem' }}>
             <img src={post.image} alt="post" className='postImage'/>
           </Box>
         }
