@@ -26,7 +26,6 @@ function Profile() {
 
   const sendImage = async (e) => {
     e.preventDefault()
-    console.log(CLIENT_ID)
     const formData = new FormData()
     formData.append('image', e.target.files[0])
     try {
