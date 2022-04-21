@@ -255,7 +255,7 @@ function Profile() {
                       sx={{ marginRight: '20px' }}
                       onClick={follow}
                     >
-                    {auth && (following) ? 'Followed' : 'Follow'}
+                    {auth && (following) ? 'Unfollow' : 'Follow'}
                   </LoadingButton>
                   </Box>}
                 </Box>
