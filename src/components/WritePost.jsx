@@ -24,7 +24,7 @@ export default function WritePost() {
   const sendPost = (event) => {
     event.preventDefault();
     axios.defaults.headers.common['Authorization'] = token;
-    if(newPost.trim() !== '') {
+    if(newPost.trim() !== '' || image !== '') {
       setLoading(true)
       console.log(newPost)
       axios.post(`${URL}posts`, {
@@ -37,9 +37,9 @@ export default function WritePost() {
         }).catch(err => {
           setLoading(false)
         })
+      setNewPost('')
+      setImage('')
     }
-    setNewPost('')
-    setImage('')
   }
 
   const addPhoto = async (event) => {
