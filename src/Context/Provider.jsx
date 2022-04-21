@@ -11,6 +11,7 @@ function Provider({children}) {
   const navigate = useNavigate()
   // const URL = 'http://localhost:5432/api/'
   const URL = 'https://the-social-back.herokuapp.com/api/'
+  const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
 
   useEffect(() => {
     const storageToken = localStorage.getItem('token')
@@ -105,7 +106,8 @@ function Provider({children}) {
     fetchPosts,
     axios,
     logout,
-    fetchLoad
+    CLIENT_ID,
+    fetchLoad,
   };
 
   return (

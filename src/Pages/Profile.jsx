@@ -1,11 +1,16 @@
 import React, {useState, useEffect, useContext} from 'react'
 import { useParams } from 'react-router-dom'
 import MyContext from '../Context'
-import axios from 'axios'
 import Header from '../components/Header'
 import { Avatar, Box, Typography } from '@mui/material'
 import PostCard from '../components/PostCard'
 import EditProfile from '../components/EditProfile'
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+
+const Input = styled('input')({
+  display: 'none',
+});
 
 function Profile() {
   const { nickname } = useParams()
@@ -17,7 +22,42 @@ function Profile() {
   const [loadCountComments, setLoadCountComments] = useState(false)
   const [countLikes, setCountLikes] = useState(0)
   const [countComments, setCountComments] = useState(0)
-  const {URL, user} = useContext(MyContext)
+  const {URL, user, CLIENT_ID, axios, fetchLoad } = useContext(MyContext)
+
+  const sendImage = async (e) => {
+    e.preventDefault()
+    const formData = new FormData()
+    formData.append('image', e.target.files[0])
+    try {
+      const res = await fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: {
+          Authorization: `Client-ID ${CLIENT_ID}`,
+        },
+        body: formData,
+      })
+      const data = await res.json()
+      await axios.put(`${URL}users/me`, {
+        image: data.data.link,
+        name: user.name,
+        nickName: user.nickName,
+      })
+      await getUser();
+      await fetchLoad();
+    } catch (err) {
+      alert('Something went wrong')
+    }
+  }
+
+  const getUser = async () => {
+    try {
+      const res = await axios.get(`${URL}users/${nickname}`)
+      setUserLink(res.data)
+      setLoading(false)
+    } catch (err) {
+      setError(true)
+    }
+  }
 
   useEffect(() => {
     setLoading(true)
@@ -29,7 +69,7 @@ function Profile() {
         setError(true)
         setLoading(false)
       });
-  }, [nickname, URL])
+  }, [nickname, URL, axios])
 
   useEffect(() => {
     if (userLink) {
@@ -41,7 +81,7 @@ function Profile() {
           setLoading(false)
         });
     }
-  }, [userLink, URL])
+  }, [userLink, URL, axios])
 
   useEffect(() => {
     if (userLink) {
@@ -54,7 +94,7 @@ function Profile() {
           setLoading(false)
         });
     }
-  }, [userLink, URL])
+  }, [userLink, URL, axios])
 
   useEffect(() => {
     if (userLink) {
@@ -67,7 +107,7 @@ function Profile() {
           setLoading(false)
         });
     }
-  }, [userLink, URL])
+  }, [userLink, URL, axios])
 
   const fetchUser = async () => {
     try {
@@ -142,7 +182,15 @@ function Profile() {
                   @{userLink.nickName}
                 </Typography>
                 { user && (userLink.id === user.id) ? (
-                  <EditProfile user={userLink} fetch={fetchUser} />
+                  <>
+                    <EditProfile user={userLink} fetch={fetchUser} />
+                    <label htmlFor="contained-button-file">
+                      <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={sendImage} />
+                      <Button variant="contained" component="span">
+                        Upload
+                      </Button>
+                    </label>
+                  </>
                 ) : null }
                 {loadCountLikes && loadCountComments ? (
                   <Typography
