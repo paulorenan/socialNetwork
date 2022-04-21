@@ -169,6 +169,11 @@ function PostCard(props) {
         <ReactMarkdown className="mark" remarkPlugins={[remarkGfm]}>
           {post.content}
         </ReactMarkdown>
+        {(post.image) &&
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem' }}>
+            <img src={post.image} alt="post" className='postImage'/>
+          </Box>
+        }
       </CardContent>
       <CardActions disableSpacing>
         <Button onClick={handleLike} disabled={!auth}>

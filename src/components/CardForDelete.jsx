@@ -49,6 +49,11 @@ export default function CardForDelete({ post }) {
         <ReactMarkdown className="mark" remarkPlugins={[remarkGfm]}>
           {post.content}
         </ReactMarkdown>
+        {(post.image) &&
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem' }}>
+            <img src={post.image} alt="post" className='postImage'/>
+          </Box>
+        }
       </CardContent>
     </Box>
   )
