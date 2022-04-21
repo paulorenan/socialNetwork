@@ -96,7 +96,7 @@ function PostCard(props) {
   }, [URL, axios, post.id])
 
   return (
-    <Card sx={{ maxWidth: 450, width:'80%', minWidth: 330, margin: 1 }}>
+    <Card className="card" sx={{ maxWidth: 450, width:'100%', minWidth: 330, margin: 1, borderRadius: 0 }}>
       <CardHeader
         avatar={
           <Avatar 

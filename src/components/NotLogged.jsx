@@ -6,16 +6,16 @@ function NotLogged() {
   let navigate = useNavigate()
   return (
     <Box
+    className='radios'
     sx={{
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       backgroundColor: 'white',
-      width: '95%',
+      width: '100%',
       maxWidth: '500px',
       minWidth: '300px',
       margin: '10px',
-      borderRadius: '10px',
     }}
   >
       <h1>Not logged</h1>

@@ -64,16 +64,16 @@ export default function WritePost() {
 
   return (
     <Box
+    className='radios'
     sx={{
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       backgroundColor: 'white',
-      width: '95%',
+      width: '100%',
       maxWidth: '500px',
       minWidth: '300px',
       margin: '10px',
-      borderRadius: '10px',
     }}
   >
     <Container

@@ -20,12 +20,16 @@ function Profile() {
   const [posts, setPosts] = useState([])
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [loadCountLikes, setLoadCountLikes] = useState(false)
-  const [loadCountComments, setLoadCountComments] = useState(false)
-  const [countLikes, setCountLikes] = useState(0)
-  const [countComments, setCountComments] = useState(0)
   const [loadingPhoto, setLoadingPhoto] = useState(false)
-  const {URL, user, CLIENT_ID, axios, fetchLoad } = useContext(MyContext)
+  const [countFollowers, setCountFollowers] = useState(0)
+  const [loadingCountFollowers, setLoadingCountFollowers] = useState(true)
+  const [countFollowing, setCountFollowing] = useState(0)
+  const [loadingCountFollowing, setLoadingCountFollowing] = useState(true)
+  const [followers, setFollowers] = useState([])
+  const [following, setFollowing] = useState(false)
+  const [loadFollowing, setLoadFollowing] = useState(false)
+  const [loadingFollowers, setLoadingFollowers] = useState(true)
+  const {URL, user, CLIENT_ID, axios, fetchLoad, auth } = useContext(MyContext)
 
   const sendImage = async (e) => {
     e.preventDefault()
@@ -88,31 +92,56 @@ function Profile() {
     }
   }, [userLink, URL, axios])
 
-  useEffect(() => {
+  useEffect(() => { // fetch count followers
     if (userLink) {
-      axios.get(`${URL}answers/user/count/${userLink.id}`)
+      setLoadingCountFollowers(true)
+      axios.get(`${URL}followers/count/${userLink.id}`)
         .then(res => {
-          setCountComments(res.data)
-          setLoadCountComments(true)
+          setCountFollowers(res.data)
+          setLoadingCountFollowers(false)
         }).catch(() => {
           setError(true)
-          setLoading(false)
+          setLoadingCountFollowers(false)
         });
     }
   }, [userLink, URL, axios])
 
-  useEffect(() => {
+  useEffect(() => { // fetch count following
     if (userLink) {
-      axios.get(`${URL}likes/user/count/${userLink.id}`)
+      setLoadingCountFollowing(true)
+      axios.get(`${URL}followers/following/count/${userLink.id}`)
         .then(res => {
-          setCountLikes(res.data)
-          setLoadCountLikes(true)
+          setCountFollowing(res.data)
+          setLoadingCountFollowing(false)
         }).catch(() => {
           setError(true)
-          setLoading(false)
+          setLoadingCountFollowing(false)
         });
     }
   }, [userLink, URL, axios])
+
+  useEffect(() => { // fetch followers
+    if (userLink) {
+      setLoadingFollowers(true)
+      axios.get(`${URL}followers/${userLink.id}`)
+        .then(res => {
+          setFollowers(res.data)
+          setLoadingFollowers(false)
+        }).catch(() => {
+          setError(true)
+          setLoadingFollowers(false)
+        });
+    }
+  }, [userLink, URL, axios])
+
+  useEffect(() => { // fetch following
+    if (user) {
+      const userFollowing = followers.some(follower => follower.followerId === user.id)
+      if (userFollowing) {
+        setFollowing(true)
+      }
+    }
+  }, [followers, user])
 
   const fetchUser = async () => {
     try {
@@ -124,6 +153,42 @@ function Profile() {
       setLoading(false)
     }
   }
+
+  const getCountFollowers = async () => {
+    try {
+      const res = await axios.get(`${URL}followers/count/${userLink.id}`)
+      setCountFollowers(res.data)
+      setLoadingCountFollowers(false)
+    } catch (err) {
+      setError(true)
+      setLoadingCountFollowers(false)
+    };
+  };
+
+
+  const follow = async () => {
+    try {
+      if (following) {
+        setLoadFollowing(true)
+        await axios.delete(`${URL}followers/${userLink.id}`)
+        await getCountFollowers();
+        setFollowing(false)
+        setLoadFollowing(false)
+      } else {
+        setLoadFollowing(true)
+        await axios.post(`${URL}followers/`, {
+          userId: userLink.id,
+        })
+        await getCountFollowers();
+        setFollowing(true)
+        setLoadFollowing(false)
+      }
+    } catch (err) {
+      alert('Something went wrong')
+    }
+    setLoadFollowing(false)
+  }
+
 
   return (
     <div className='App'>
@@ -139,88 +204,97 @@ function Profile() {
         {loading ? null : error ? <h1>User not found</h1> : (
           <>
             <Box
+            className='radios'
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 backgroundColor: 'white',
-                width: '95%',
+                width: '100%',
                 maxWidth: '500px',
                 minWidth: '300px',
                 margin: '10px',
-                borderRadius: '10px',
               }}
             >
-              <Avatar
-                src={userLink.image}
-                sx={{
-                  width: '100px',
-                  height: '100px',
-                  margin: '10px',
-                }}
-              />
               <Box
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'center',
+                  width: '100%',
                 }}
               >
-                <Typography
-                  variant="h4"
-                  sx={{
-                    fontWeight: 'fontWeightBold',
-                    marginBottom: '0px',
-                  }}
+                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                  <Avatar
+                    src={userLink.image}
+                    sx={{ width: ['100px', '150px'], height: ['100px', '150px'], margin: '20px', marginBottom: '0px' }}
+                  />
+                  { (auth && (userLink.id === user.id)) ? (
+                    <Stack
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginTop: '20px',
+                      }}
+                    >
+                      <label htmlFor="contained-button-file">
+                        <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={sendImage} />
+                        <LoadingButton component="span" loading={loadingPhoto}>
+                          <PhotoCamera />
+                        </LoadingButton>
+                      </label>
+                      <EditProfile user={userLink} fetch={fetchUser} />
+                    </Stack>
+                  ) : <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: '20px' }}>
+                    <LoadingButton
+                      variant="contained"
+                      component="span"
+                      loading={loadingFollowers || loadFollowing}
+                      disabled={!auth}
+                      sx={{ marginRight: '20px' }}
+                      onClick={follow}
+                    >
+                    {auth && (following) ? 'Followed' : 'Follow'}
+                  </LoadingButton>
+                  </Box>}
+                </Box>
+                <Box
+                  sx={{ display: 'flex', flexDirection: 'column', marginLeft: '20px' }}
                 >
-                  {userLink.name}
-                </Typography>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  color="textSecondary"
-                  sx={{
-                    fontWeight: 'fontWeightBold',
-                    marginBottom: '2px',
-                  }}
-                >
-                  @{userLink.nickName}
-                </Typography>
-                { user && (userLink.id === user.id) ? (
-                  <Stack
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
+                  <Typography
+                    variant="h4"
+                    sx={{ fontWeight: 'fontWeightBold', marginBottom: '0px' }}
                   >
-                    <EditProfile user={userLink} fetch={fetchUser} />
-                    <label htmlFor="contained-button-file">
-                      <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={sendImage} />
-                      <LoadingButton component="span" loading={loadingPhoto}>
-                        <PhotoCamera />
-                      </LoadingButton>
-                    </label>
-                  </Stack>
-                ) : null }
-                {loadCountLikes && loadCountComments ? (
+                    {userLink.name}
+                  </Typography>
                   <Typography
                     variant="h6"
                     component="h2"
                     color="textSecondary"
-                    textAlign="center"
+                    sx={{ fontWeight: 'fontWeightBold', marginBottom: '2px' }}
+                  >
+                    @{userLink.nickName}
+                  </Typography>
+                </Box>
+              </Box>
+                { !loadingCountFollowers && !loadingCountFollowing && 
+                  <Box
                     sx={{
-                      fontWeight: 'fontWeightBold',
-                      margin: '20px',
-                      marginTop: '0px',
+                      display: 'flex',
+                      width: '100%',
+                      flexDirection: 'row',
+                      alignItems: 'flex-start',
                       marginBottom: '10px',
                     }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 'fontWeightBold', marginBottom: '2px', marginLeft: '20px' }}
                     >
-                    @{userLink.nickName} has {posts.length} posts, {countComments} comments and give {countLikes} likes
+                      {countFollowers} Followers | {countFollowing} Following
                     </Typography>
-                ) : null}
-              </Box>
+                  </Box>
+                    }
             </Box>
             {posts.map(post => (
               <PostCard key={post.id} post={post} />
