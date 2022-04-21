@@ -13,7 +13,6 @@ export default function EditProfile({user, fetch}) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(user.name);
   const [nickName, setNickName] = useState(user.nickName);
-  const [image, setImage] = useState('');
   const [loading, setLoading] = useState(false);
   const [nickError, setNickError] = useState(false);
   const { URL, axios, fetchLoad } = useContext(MyContext);
@@ -27,19 +26,13 @@ export default function EditProfile({user, fetch}) {
     setOpen(false);
   };
 
-  useEffect(() => {
-    if (user.image) {
-      setImage(user.image);
-    }
-  }, [user]);
-
   const handleEdit = () => {
     if (nickName.includes(' ')) {
       setNickError(true);
     } else {
       if (name.trim() !== '' && nickName.trim() !== '') {
         setLoading(true);
-        axios.put(`${URL}users/me`, { name, nickName, image })
+        axios.put(`${URL}users/me`, { name, nickName })
           .then(() => {
             if (nickName !== user.nickName) {
               fetchLoad();
@@ -90,16 +83,6 @@ export default function EditProfile({user, fetch}) {
             variant="standard"
             error={nickError}
             helperText={nickError ? 'Nickname cannot contain spaces' : ''}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="image"
-            label="Image"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-            fullWidth
-            variant="standard"
           />
         </DialogContent>
         <DialogActions>

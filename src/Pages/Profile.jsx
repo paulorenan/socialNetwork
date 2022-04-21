@@ -6,7 +6,10 @@ import { Avatar, Box, Typography } from '@mui/material'
 import PostCard from '../components/PostCard'
 import EditProfile from '../components/EditProfile'
 import { styled } from '@mui/material/styles';
+import LoadingButton from '@mui/lab/LoadingButton';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
 const Input = styled('input')({
   display: 'none',
@@ -22,10 +25,12 @@ function Profile() {
   const [loadCountComments, setLoadCountComments] = useState(false)
   const [countLikes, setCountLikes] = useState(0)
   const [countComments, setCountComments] = useState(0)
+  const [loadingPhoto, setLoadingPhoto] = useState(false)
   const {URL, user, CLIENT_ID, axios, fetchLoad } = useContext(MyContext)
 
   const sendImage = async (e) => {
     e.preventDefault()
+    setLoadingPhoto(true)
     const formData = new FormData()
     formData.append('image', e.target.files[0])
     try {
@@ -37,16 +42,15 @@ function Profile() {
         body: formData,
       })
       const data = await res.json()
-      await axios.put(`${URL}users/me`, {
+      await axios.put(`${URL}users/me/image`, {
         image: data.data.link,
-        name: user.name,
-        nickName: user.nickName,
       })
       await getUser();
       await fetchLoad();
     } catch (err) {
       alert('Something went wrong')
     }
+    setLoadingPhoto(false)
   }
 
   const getUser = async () => {
@@ -182,15 +186,22 @@ function Profile() {
                   @{userLink.nickName}
                 </Typography>
                 { user && (userLink.id === user.id) ? (
-                  <>
+                  <Stack
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
                     <EditProfile user={userLink} fetch={fetchUser} />
                     <label htmlFor="contained-button-file">
                       <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={sendImage} />
-                      <Button variant="contained" component="span">
-                        Upload
-                      </Button>
+                      <LoadingButton component="span" loading={loadingPhoto}>
+                        <PhotoCamera />
+                      </LoadingButton>
                     </label>
-                  </>
+                  </Stack>
                 ) : null }
                 {loadCountLikes && loadCountComments ? (
                   <Typography
