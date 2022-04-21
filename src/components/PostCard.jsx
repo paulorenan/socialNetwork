@@ -95,6 +95,11 @@ function PostCard(props) {
     return () => clearInterval(interval)
   }, [URL, axios, post.id])
 
+  const handleNavigate = () => {
+    window.scrollTo(0, 0)
+    navigate(`/p/${post.user.nickName}`)
+  }
+
   return (
     <Card className="card" sx={{ maxWidth: 450, width:'100%', minWidth: 330, margin: 1, borderRadius: 0 }}>
       <CardHeader
@@ -102,7 +107,7 @@ function PostCard(props) {
           <Avatar 
             sx={{ bgcolor: red[500], cursor: 'pointer' }}
             aria-label="user"
-            onClick={() => navigate(`/p/${post.user.nickName}`)}
+            onClick={handleNavigate}
             src={post.user.image}
           >
             {post.user.name[0].toUpperCase()}
@@ -139,7 +144,7 @@ function PostCard(props) {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box
               sx={{ fontWeight: 'bold', cursor: 'pointer' }}
-              onClick={() => navigate(`/p/${post.user.nickName}`)}
+              onClick={handleNavigate}
             >
               {post.user.name}
             </Box>
@@ -150,7 +155,7 @@ function PostCard(props) {
             <Box sx={{ display: 'flex', alignItems: 'center' }} >
               <Box
               sx={{ cursor: 'pointer' }}
-              onClick={() => navigate(`/p/${post.user.nickName}`)}
+              onClick={handleNavigate}
               >
                 @{post.user.nickName}
               </Box>

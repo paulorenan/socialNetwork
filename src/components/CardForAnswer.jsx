@@ -34,6 +34,11 @@ export default function CardForAnswer({ post, fetch }) {
     }
   }, [user, post, auth]);
 
+  const handleNavigate = () => {
+    window.scrollTo(0, 0)
+    navigate(`/p/${post.user.nickName}`)
+  }
+
   return (
     <Box 
       sx={{ maxWidth: 600, minWidth: 330, borderTop: '1px solid #e0e0e0', margin: 1 }}
@@ -80,7 +85,7 @@ export default function CardForAnswer({ post, fetch }) {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box
               sx={{ fontWeight: 'bold', cursor: 'pointer' }}
-              onClick={() => navigate(`/p/${post.user.nickName}`)}
+              onClick={handleNavigate}
             >
               {post.user.name}
             </Box>
@@ -91,7 +96,7 @@ export default function CardForAnswer({ post, fetch }) {
           <Box sx={{ display: 'flex', alignItems: 'center' }} >
             <Box
             sx={{ cursor: 'pointer' }}
-            onClick={() => navigate(`/p/${post.user.nickName}`)}
+            onClick={handleNavigate}
             >
               @{post.user.nickName}
             </Box>
