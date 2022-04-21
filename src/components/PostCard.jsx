@@ -165,7 +165,7 @@ function PostCard(props) {
             </Box>
         }
       />
-      <CardContent>
+      <CardContent sx={{ paddingTop: 0, paddingBottom: 0 }}>
         <ReactMarkdown className="mark" remarkPlugins={[remarkGfm]}>
           {post.content}
         </ReactMarkdown>

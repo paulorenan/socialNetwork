@@ -45,7 +45,7 @@ export default function CardForDelete({ post }) {
           </Box>
       }
       />
-      <CardContent>
+      <CardContent sx={{ paddingTop: 0, paddingBottom: 0 }}>
         <ReactMarkdown className="mark" remarkPlugins={[remarkGfm]}>
           {post.content}
         </ReactMarkdown>
