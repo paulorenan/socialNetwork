@@ -9,6 +9,7 @@ import { styled } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Stack from '@mui/material/Stack';
+import FollowDialog from '../components/FollowDialog';
 
 const Input = styled('input')({
   display: 'none',
@@ -21,14 +22,12 @@ function Profile() {
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const [loadingPhoto, setLoadingPhoto] = useState(false)
-  const [countFollowers, setCountFollowers] = useState(0)
-  const [loadingCountFollowers, setLoadingCountFollowers] = useState(true)
-  const [countFollowing, setCountFollowing] = useState(0)
-  const [loadingCountFollowing, setLoadingCountFollowing] = useState(true)
   const [followers, setFollowers] = useState([])
-  const [following, setFollowing] = useState(false)
-  const [loadFollowing, setLoadFollowing] = useState(false)
+  const [following, setFollowing] = useState([])
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [loadIsFollowing, setLoadIsFollowing] = useState(false)
   const [loadingFollowers, setLoadingFollowers] = useState(true)
+  const [loadingFollowing, setLoadingFollowing] = useState(true)
   const {URL, user, CLIENT_ID, axios, fetchLoad, auth } = useContext(MyContext)
 
   const sendImage = async (e) => {
@@ -92,34 +91,6 @@ function Profile() {
     }
   }, [userLink, URL, axios])
 
-  useEffect(() => { // fetch count followers
-    if (userLink) {
-      setLoadingCountFollowers(true)
-      axios.get(`${URL}followers/count/${userLink.id}`)
-        .then(res => {
-          setCountFollowers(res.data)
-          setLoadingCountFollowers(false)
-        }).catch(() => {
-          setError(true)
-          setLoadingCountFollowers(false)
-        });
-    }
-  }, [userLink, URL, axios])
-
-  useEffect(() => { // fetch count following
-    if (userLink) {
-      setLoadingCountFollowing(true)
-      axios.get(`${URL}followers/following/count/${userLink.id}`)
-        .then(res => {
-          setCountFollowing(res.data)
-          setLoadingCountFollowing(false)
-        }).catch(() => {
-          setError(true)
-          setLoadingCountFollowing(false)
-        });
-    }
-  }, [userLink, URL, axios])
-
   useEffect(() => { // fetch followers
     if (userLink) {
       setLoadingFollowers(true)
@@ -135,10 +106,24 @@ function Profile() {
   }, [userLink, URL, axios])
 
   useEffect(() => { // fetch following
+    if (userLink) {
+      setLoadingFollowing(true)
+      axios.get(`${URL}followers/following/${userLink.id}`)
+        .then(res => {
+          setFollowing(res.data)
+          setLoadingFollowing(false)
+        }).catch(() => {
+          setError(true)
+          setLoadingFollowing(false)
+        });
+    }
+  }, [userLink, URL, axios]);
+
+  useEffect(() => { // fetch is following
     if (user) {
       const userFollowing = followers.some(follower => follower.followerId === user.id)
       if (userFollowing) {
-        setFollowing(true)
+        setIsFollowing(true)
       }
     }
   }, [followers, user])
@@ -154,39 +139,39 @@ function Profile() {
     }
   }
 
-  const getCountFollowers = async () => {
+  const getFollowers = async () => {
     try {
-      const res = await axios.get(`${URL}followers/count/${userLink.id}`)
-      setCountFollowers(res.data)
-      setLoadingCountFollowers(false)
+      const res = await axios.get(`${URL}followers/${userLink.id}`)
+      setFollowers(res.data)
+      setLoadingFollowers(false)
     } catch (err) {
       setError(true)
-      setLoadingCountFollowers(false)
+      setLoadingFollowers(false)
     };
   };
 
 
   const follow = async () => {
     try {
-      if (following) {
-        setLoadFollowing(true)
+      if (isFollowing) {
+        setLoadIsFollowing(true)
         await axios.delete(`${URL}followers/${userLink.id}`)
-        await getCountFollowers();
-        setFollowing(false)
-        setLoadFollowing(false)
+        await getFollowers();
+        setIsFollowing(false)
+        setLoadIsFollowing(false)
       } else {
-        setLoadFollowing(true)
+        setLoadIsFollowing(true)
         await axios.post(`${URL}followers/`, {
           userId: userLink.id,
         })
-        await getCountFollowers();
-        setFollowing(true)
-        setLoadFollowing(false)
+        await getFollowers();
+        setIsFollowing(true)
+        setLoadIsFollowing(false)
       }
     } catch (err) {
       alert('Something went wrong')
     }
-    setLoadFollowing(false)
+    setLoadIsFollowing(false)
   }
 
 
@@ -250,12 +235,12 @@ function Profile() {
                     <LoadingButton
                       variant="contained"
                       component="span"
-                      loading={loadingFollowers || loadFollowing}
+                      loading={loadingFollowers || loadIsFollowing}
                       disabled={!auth}
                       sx={{ marginRight: '20px' }}
                       onClick={follow}
                     >
-                    {auth && (following) ? 'Unfollow' : 'Follow'}
+                    {auth && (isFollowing) ? 'Unfollow' : 'Follow'}
                   </LoadingButton>
                   </Box>}
                 </Box>
@@ -276,25 +261,20 @@ function Profile() {
                   >
                     @{userLink.nickName}
                   </Typography>
-                </Box>
+                </Box>                
               </Box>
-                { !loadingCountFollowers && !loadingCountFollowing && 
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      width: '100%',
-                      flexDirection: 'row',
-                      alignItems: 'flex-start',
-                      marginBottom: '10px',
-                    }}
-                  >
-                    <Typography
-                      sx={{ fontWeight: 'fontWeightBold', marginBottom: '2px', marginLeft: '20px' }}
-                    >
-                      {countFollowers} Followers | {countFollowing} Following
-                    </Typography>
-                  </Box>
-                    }
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: '100%',
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
+                  marginBottom: '10px',
+                }}
+              >
+                <FollowDialog followers={followers} loading={loadingFollowers} name="Followers"/>
+                <FollowDialog followers={following} loading={loadingFollowing} name="Following"/>
+              </Box>
             </Box>
             {posts.map(post => (
               <PostCard key={post.id} post={post} />
