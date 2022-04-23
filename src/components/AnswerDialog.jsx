@@ -6,22 +6,34 @@ import MyContext from '../Context';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import SendIcon from '@mui/icons-material/Send';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 export default function ScrollDialog(props) {
   const [answers, setAnswers] = React.useState([]);
   const [answer, setAnswer] = React.useState('');
+  const [loading, setLoading] = React.useState(true);
+  const [firstExpanded, setFirstExpanded] = React.useState(false);
   const { URL, auth, token, axios } = React.useContext(MyContext);
   const { post, expanded } = props
 
 
   React.useEffect(() => {
-    if (expanded) {
-    axios.get(`${URL}answers/${post.id}`)
+    if (expanded && !firstExpanded) {
+      setLoading(true)
+      axios.get(`${URL}answers/${post.id}`)
       .then(res => {
         setAnswers(res.data)
+        setLoading(false)
+        setFirstExpanded(true)
+      })
+    } else if (expanded) {
+      axios.get(`${URL}answers/${post.id}`)
+      .then(res => {
+        setAnswers(res.data)
+        setLoading(false)
       })
     }
-  }, [post.id, URL, expanded, axios])
+  }, [post.id, URL, expanded, axios, firstExpanded])
 
   const fetchAnswers = () => {
     axios.get(`${URL}answers/${post.id}`)
@@ -55,6 +67,10 @@ export default function ScrollDialog(props) {
 
   return (
     <Collapse in={expanded} timeout="auto" unmountOnExit>
+      {loading && 
+        <LoadingButton loading={loading} sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%'}}>
+          <SendIcon />
+        </LoadingButton>}
       {answers.map(answer => (
         <CardForAnswer key={answer.id} post={answer} fetch={fetchAnswers} />
       ))}
