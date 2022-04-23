@@ -14,7 +14,7 @@ export default function CardForAnswer({ user }) {
 
   return (
     <Box 
-      sx={{ width: '90%', minWidth: 330, borderTop: '1px solid #e0e0e0', margin: 1 }}
+      sx={{ maxWidth: 600, minWidth: 150, borderTop: '1px solid #e0e0e0', margin: 1 }}
     >
       <CardHeader
         avatar={
