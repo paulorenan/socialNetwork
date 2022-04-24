@@ -66,7 +66,7 @@ export default function CardForAnswer({ post, fetch }) {
           <Avatar
             sx={{ bgcolor: red[500], cursor: 'pointer' }}
             aria-label="user"
-            onClick={() => navigate(`/p/${post.user.nickName}`)}
+            onClick={handleNavigate}
             src={post.user.image}
           >
             {post.user.name[0].toUpperCase()}
