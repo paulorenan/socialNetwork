@@ -26,7 +26,6 @@ export default function WritePost() {
     axios.defaults.headers.common['Authorization'] = token;
     if(newPost.trim() !== '' || image !== '') {
       setLoading(true)
-      console.log(newPost)
       axios.post(`${URL}posts`, {
         content: newPost,
         image: image

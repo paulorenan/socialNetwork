@@ -44,8 +44,7 @@ export default function EditProfile({user, fetch}) {
             setOpen(false);
             setNickError(false);
             }
-          }).catch((err) => {
-            console.log(err.response);
+          }).catch(() => {
             setLoading(false);
           });
       }

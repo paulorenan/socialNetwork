@@ -51,8 +51,6 @@ export default function ScrollDialog(props) {
       }).then(() => {
           getAnswers()
           setAnswer('')
-        }).catch(err => {
-          console.log(err)
         })
     }
     setAnswer('')

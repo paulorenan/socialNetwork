@@ -69,9 +69,8 @@ export default function SignUp() {
       }).then(res => {
         handleLogin(res.data.token, res.data.user);
         setLoading(false)
-      }).catch((err) => {
+      }).catch(() => {
         loginError();
-        console.log(err.response);
         setLoading(false)
       });
     }

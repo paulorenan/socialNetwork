@@ -10,6 +10,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Stack from '@mui/material/Stack';
 import FollowDialog from '../components/FollowDialog';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import isMoment from 'moment';
 
 const Input = styled('input')({
   display: 'none',
@@ -249,18 +251,29 @@ function Profile() {
                 >
                   <Typography
                     variant="h4"
-                    sx={{ fontWeight: 'fontWeightBold', marginBottom: '0px' }}
+                    sx={{ fontWeight: 'fontWeightBold', marginBottom: '0px', }}
                   >
                     {userLink.name}
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    color="textSecondary"
-                    sx={{ fontWeight: 'fontWeightBold', marginBottom: '2px' }}
-                  >
-                    @{userLink.nickName}
-                  </Typography>
+                  </Typography>                  
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Typography
+                      variant="h6"
+                      component="h2"
+                      color="textSecondary"
+                      sx={{ fontWeight: 'fontWeightBold', marginBottom: '2px' }}
+                    >
+                      @{userLink.nickName}
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginRight: '20px'}}>
+                      <CalendarMonthIcon />
+                      <Typography
+                        variant="p"
+                        sx={{ fontWeight: 'fontWeightBold', marginBottom: '0px', marginLeft: '5px' }}
+                      >
+                        Joined {isMoment(userLink.createdAt).format('ll')}
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Box>                
               </Box>
               <Box
