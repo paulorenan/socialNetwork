@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Typography, DialogActions, DialogContent, DialogTitle, Dialog, DialogContentText, MenuItem } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MyContext from '../Context';
+import CardForDelete from '../components/CardForDelete';
 
 export default function DeleteAnswer({ answer, click, fetch }) {
   const [open, setOpen] = useState(false);
@@ -49,9 +50,7 @@ export default function DeleteAnswer({ answer, click, fetch }) {
           <DialogContentText>
             Are you sure you want to delete this comment?
           </DialogContentText>
-          <Typography>
-          {answer.content}
-          </Typography>
+          <CardForDelete post={answer} />
         </DialogContent>
         <DialogActions>
           <LoadingButton loading={loading} onClick={handleClose}>Cancel</LoadingButton>

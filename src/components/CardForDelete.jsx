@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { CardHeader, CardContent,Avatar, Box } from '@mui/material/';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
@@ -7,6 +7,25 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm'
 
 export default function CardForDelete({ post }) {
+  const [moment, setMoment] = useState('');
+
+  useEffect(() => {
+    const date = isMoment(post.createdAt).fromNow()
+    const splitDate = date.split('')
+    const arrDate = []
+    arrDate[0] = splitDate[0]
+    splitDate.shift();
+    if (!isNaN(splitDate[0])) {
+      arrDate[1] = splitDate[0]
+      splitDate.shift();
+    }
+    if(splitDate.join('').includes('days')&& (arrDate.join('') > 3)) {
+      setMoment(isMoment(post.createdAt).format('ll'))
+    } else {
+      setMoment(isMoment(post.createdAt).fromNow())
+    }
+  }, [post.createdAt])
+
   return (
     <Box 
       sx={{ maxWidth: 600, minWidth: 200, borderTop: '1px solid #e0e0e0', margin: 1 }}
@@ -26,7 +45,7 @@ export default function CardForDelete({ post }) {
             <Box>
               {post.user.name}
             </Box>
-            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
+            <Box sx={{ ml: 1 }}>{moment}</Box>
           </Box>
         } 
         subheader={

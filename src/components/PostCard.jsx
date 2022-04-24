@@ -36,7 +36,8 @@ function PostCard(props) {
   const [showMore, setShowMore] = useState(false)
   const [numberComments, setNumberComments] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [moment, setMoment] = useState('')
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate()
 
   const handleOpenUserMenu = (event) => {
@@ -95,6 +96,23 @@ function PostCard(props) {
     return () => clearInterval(interval)
   }, [URL, axios, post.id])
 
+  useEffect(() => {
+    const date = isMoment(post.createdAt).fromNow()
+    const splitDate = date.split('')
+    const arrDate = []
+    arrDate[0] = splitDate[0]
+    splitDate.shift();
+    if (!isNaN(splitDate[0])) {
+      arrDate[1] = splitDate[0]
+      splitDate.shift();
+    }
+    if(splitDate.join('').includes('days')&& (arrDate.join('') > 3)) {
+      setMoment(isMoment(post.createdAt).format('ll'))
+    } else {
+      setMoment(isMoment(post.createdAt).fromNow())
+    }
+  }, [post.createdAt])
+
   const handleNavigate = () => {
     window.scrollTo(0, 0)
     navigate(`/p/${post.user.nickName}`)
@@ -148,7 +166,7 @@ function PostCard(props) {
             >
               {post.user.name}
             </Box>
-            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
+            <Box sx={{ ml: 1 }}>{moment}</Box>
           </Box>
         } 
         subheader={

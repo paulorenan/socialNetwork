@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {Menu, CardHeader, CardContent,Avatar, Box } from '@mui/material/';
 import IconButton from '@mui/material/IconButton';
@@ -13,9 +13,10 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm'
 
 export default function CardForAnswer({ post, fetch }) {
-  const [ showMore, setShowMore ]  = React.useState(false);
-  const { user, auth } = React.useContext(MyContext);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [ showMore, setShowMore ]  = useState(false);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [moment, setMoment] = useState('');
+  const { user, auth } = useContext(MyContext);
   const navigate = useNavigate()
 
   const handleOpenUserMenu = (event) => {
@@ -26,13 +27,30 @@ export default function CardForAnswer({ post, fetch }) {
     setAnchorElUser(null);
   };
   
-  React.useEffect(() => {
+  useEffect(() => {
     if (auth) {
       if (post.userId === user.id) {
         setShowMore(true)
       }
     }
   }, [user, post, auth]);
+
+  useEffect(() => {
+    const date = isMoment(post.createdAt).fromNow()
+    const splitDate = date.split('')
+    const arrDate = []
+    arrDate[0] = splitDate[0]
+    splitDate.shift();
+    if (!isNaN(splitDate[0])) {
+      arrDate[1] = splitDate[0]
+      splitDate.shift();
+    }
+    if(splitDate.join('').includes('days')&& (arrDate.join('') > 3)) {
+      setMoment(isMoment(post.createdAt).format('ll'))
+    } else {
+      setMoment(isMoment(post.createdAt).fromNow())
+    }
+  }, [post.createdAt])
 
   const handleNavigate = () => {
     window.scrollTo(0, 0)
@@ -89,7 +107,7 @@ export default function CardForAnswer({ post, fetch }) {
             >
               {post.user.name}
             </Box>
-            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
+            <Box sx={{ ml: 1 }}>{moment}</Box>
           </Box>
         } 
         subheader={
