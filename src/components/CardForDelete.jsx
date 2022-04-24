@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm'
 
 export default function CardForDelete({ post }) {
-  const [moment, setMoment] = useState('');
+  const [moment, setMoment] = useState(false);
 
   useEffect(() => {
     const date = isMoment(post.createdAt).fromNow()
@@ -20,9 +20,9 @@ export default function CardForDelete({ post }) {
       splitDate.shift();
     }
     if(splitDate.join('').includes('days')&& (arrDate.join('') > 3)) {
-      setMoment(isMoment(post.createdAt).format('ll'))
+      setMoment(true)
     } else {
-      setMoment(isMoment(post.createdAt).fromNow())
+      setMoment(false)
     }
   }, [post.createdAt])
 
@@ -45,7 +45,11 @@ export default function CardForDelete({ post }) {
             <Box>
               {post.user.name}
             </Box>
-            <Box sx={{ ml: 1 }}>{moment}</Box>
+            { moment ? 
+            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).format('ll')}</Box> 
+            : 
+            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
+            }
           </Box>
         } 
         subheader={

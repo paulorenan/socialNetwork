@@ -36,7 +36,7 @@ function PostCard(props) {
   const [showMore, setShowMore] = useState(false)
   const [numberComments, setNumberComments] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [moment, setMoment] = useState('')
+  const [moment, setMoment] = useState(false)
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate()
 
@@ -107,9 +107,9 @@ function PostCard(props) {
       splitDate.shift();
     }
     if(splitDate.join('').includes('days')&& (arrDate.join('') > 3)) {
-      setMoment(isMoment(post.createdAt).format('ll'))
+      setMoment(true)
     } else {
-      setMoment(isMoment(post.createdAt).fromNow())
+      setMoment(false)
     }
   }, [post.createdAt])
 
@@ -166,7 +166,11 @@ function PostCard(props) {
             >
               {post.user.name}
             </Box>
-            <Box sx={{ ml: 1 }}>{moment}</Box>
+            { moment ? 
+            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).format('ll')}</Box> 
+            : 
+            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
+            }
           </Box>
         } 
         subheader={

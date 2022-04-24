@@ -15,7 +15,7 @@ import remarkGfm from 'remark-gfm'
 export default function CardForAnswer({ post, fetch }) {
   const [ showMore, setShowMore ]  = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [moment, setMoment] = useState('');
+  const [moment, setMoment] = useState(false);
   const { user, auth } = useContext(MyContext);
   const navigate = useNavigate()
 
@@ -46,9 +46,9 @@ export default function CardForAnswer({ post, fetch }) {
       splitDate.shift();
     }
     if(splitDate.join('').includes('days')&& (arrDate.join('') > 3)) {
-      setMoment(isMoment(post.createdAt).format('ll'))
+      setMoment(true)
     } else {
-      setMoment(isMoment(post.createdAt).fromNow())
+      setMoment(false)
     }
   }, [post.createdAt])
 
@@ -107,7 +107,11 @@ export default function CardForAnswer({ post, fetch }) {
             >
               {post.user.name}
             </Box>
-            <Box sx={{ ml: 1 }}>{moment}</Box>
+            { moment ? 
+            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).format('ll')}</Box> 
+            : 
+            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
+            }
           </Box>
         } 
         subheader={
