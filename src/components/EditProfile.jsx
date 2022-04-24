@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext } from 'react';
+import React, {useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -81,7 +81,7 @@ export default function EditProfile({user, fetch}) {
             fullWidth
             variant="standard"
             error={nickError}
-            helperText={nickError ? 'Nickname cannot contain spaces' : ''}
+            helperText={nickError && 'Nickname cannot contain spaces'}
           />
         </DialogContent>
         <DialogActions>
