@@ -125,7 +125,7 @@ function PostCard(props) {
           <Avatar 
             sx={{ bgcolor: red[500], cursor: 'pointer' }}
             aria-label="user"
-            // onClick={handleNavigate}
+            onClick={handleNavigate}
             src={post.user.image}
           >
             {post.user.name[0].toUpperCase()}
