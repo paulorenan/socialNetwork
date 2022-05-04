@@ -12,6 +12,7 @@ import Stack from '@mui/material/Stack';
 import FollowDialog from '../components/FollowDialog';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import isMoment from 'moment';
+import axios2 from 'axios';
 
 const Input = styled('input')({
   display: 'none',
@@ -30,29 +31,25 @@ function Profile() {
   const [loadIsFollowing, setLoadIsFollowing] = useState(false)
   const [loadingFollowers, setLoadingFollowers] = useState(true)
   const [loadingFollowing, setLoadingFollowing] = useState(true)
-  const {URL, user, CLIENT_ID, axios, fetchLoad, auth } = useContext(MyContext)
+  const {URL, user, CLIENT_ID, axios, fetchLoad, auth, token } = useContext(MyContext)
 
   const sendImage = async (e) => {
     e.preventDefault()
     setLoadingPhoto(true)
-      if (e.target.files[0]) {
-      const formData = new FormData()
-      formData.append('image', e.target.files[0])
-      try {
-        const res = await fetch('https://api.imgur.com/3/image', {
-          method: 'POST',
-          headers: {
-            Authorization: `Client-ID ${CLIENT_ID}`,
-          },
-          body: formData,
-        })
-        const data = await res.json()
-        await axios.put(`${URL}users/me/image`, {
-          image: data.data.link,
-        })
-        await getUser();
-        await fetchLoad();
-      } catch (err) {
+    if(e.target.files[0]) {
+      const formData = new FormData();
+      formData.append('image', e.target.files[0]);
+      axios2.defaults.headers.common['Authorization'] = `Client-ID ${CLIENT_ID}`
+      try{
+      const res = await axios2.post('https://api.imgur.com/3/image', formData)
+      axios.defaults.headers.common['Authorization'] = token;
+      await axios.put(`${URL}users/me/image`, {
+        image: res.data.data.link,
+      })
+      await getUser();
+      await fetchLoad();
+      }catch(err){
+        console.log(err.response)
         alert('Something went wrong')
       }
     }
