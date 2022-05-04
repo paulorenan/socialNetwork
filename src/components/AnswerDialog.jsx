@@ -64,6 +64,7 @@ export default function ScrollDialog(props) {
   const getAnswers = async () => {
     axios.get(`${URL}answers/${post.id}`)
       .then(res => {
+        set(res.data.length)
         setAnswers(res.data)
       })
   }
