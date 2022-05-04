@@ -8,6 +8,7 @@ function Provider({children}) {
   const [user, setUser] = useState(null)
   const [auth, setAuth] = useState(false)
   const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
   // const URL = 'http://localhost:5432/api/'
   const URL = 'https://the-social-back.herokuapp.com/api/'
@@ -32,6 +33,7 @@ function Provider({children}) {
 
   useEffect(() => {
     async function load() {
+      setLoading(true)
       axios.defaults.headers.common['Authorization'] = token;
       try{
         const load1 = await axios.post(`${URL}load`);
@@ -39,9 +41,11 @@ function Provider({children}) {
           setAuth(true);
           localStorage.setItem('user', JSON.stringify(load1.data.user));
           setUser(load1.data.user);
+          setLoading(false);
         }
       }catch(err){
         setAuth(false);
+        setLoading(false);
       }
     }
     if (token) {
@@ -108,6 +112,7 @@ function Provider({children}) {
     logout,
     CLIENT_ID,
     fetchLoad,
+    loading,
   };
 
   return (
