@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles';
-import {Card, CardHeader, CardContent, CardActions, Box, IconButton,Typography, Button, Menu } from '@mui/material';
+import {Card, CardHeader, CardContent, CardActions, Box, IconButton,Typography, Menu } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -38,6 +38,8 @@ function PostCard(props) {
   const [loading, setLoading] = useState(true)
   const [moment, setMoment] = useState(false)
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [postLike, setPostLike] = useState([])
+  const [loadLike, setLoadLike] = useState(true)
   const navigate = useNavigate()
 
   const handleOpenUserMenu = (event) => {
@@ -52,20 +54,40 @@ function PostCard(props) {
     setExpanded(!expanded);
   };
 
+  useEffect(() => { // get likes
+    setLoadLike(true)
+    axios.get(`${URL}likes/post/${post.id}`).then(res => {
+      setPostLike(res.data)
+      setLoadLike(false)
+    });
+  }, [axios, URL, post.id])
+
   useEffect(() => {
-    if (user) {
-      if (post.likes.find(like => like.userId === user.id)) {
+    if ((user && auth) && postLike.length > 0) {
+      if (postLike.find(like => like.userId === user.id)) {
         setLike(true)
       }
     }
-  }, [user, post]);
+  }, [user, postLike, auth]);
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (auth) {
+      setLoadLike(true)
       if (like) {
-        axios.delete(`${URL}likes/${post.id}`, { postId: post.id }).then(() => { setLike(false) })
+        await axios.delete(`${URL}likes/${post.id}`, { postId: post.id })
+        setLike(false)
+        axios.get(`${URL}likes/post/${post.id}`).then(res => {
+          setPostLike(res.data)
+          setLoadLike(false)
+          setLike(false)
+        });
       } else {
-        axios.post(`${URL}likes`, { postId: post.id }).then(() => { setLike(true) })
+        await axios.post(`${URL}likes`, { postId: post.id })
+        axios.get(`${URL}likes/post/${post.id}`).then(res => {
+          setPostLike(res.data)
+          setLoadLike(false)
+          setLike(true)
+        });
       }
     } else {
       alert('Você precisa estar logado para curtir um post')
@@ -88,12 +110,9 @@ function PostCard(props) {
   }, [URL, axios, post.id])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      axios.get(`${URL}answers/count/${post.id}`).then(res => {
-        setNumberComments(res.data)
-      })
-    }, 5000)
-    return () => clearInterval(interval)
+    axios.get(`${URL}answers/count/${post.id}`).then(res => {
+      setNumberComments(res.data)
+    })
   }, [URL, axios, post.id])
 
   useEffect(() => {
@@ -203,10 +222,10 @@ function PostCard(props) {
         }
       </CardContent>
       <CardActions disableSpacing>
-        <Button onClick={handleLike} disabled={!auth}>
-          {post.likes.length} {post.likes.length === 1 ? 'like' : 'likes'}
+        <LoadingButton onClick={handleLike} disabled={!auth} loading={loadLike}>
+          {postLike.length} {postLike.length === 1 ? 'like' : 'likes'}
           { like ? <FavoriteIcon sx={{ color: 'red', marginLeft: 1}}/> : <FavoriteBorderIcon sx={{ color: 'red', marginLeft: 1}}/> }
-        </Button>
+        </LoadingButton>
         <LoadingButton
           size="small"
           onClick={handleExpandClick}
@@ -224,7 +243,7 @@ function PostCard(props) {
           <ExpandMoreIcon />
         </ExpandMore>
       </CardActions>
-        <AnswerDialog post={post} expanded={expanded} />
+        <AnswerDialog post={post} expanded={expanded} set={setNumberComments} />
     </Card>
   )
 }

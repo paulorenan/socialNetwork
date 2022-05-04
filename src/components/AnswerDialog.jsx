@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CardForAnswer from './CardForAnswer';
@@ -9,20 +9,21 @@ import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 export default function ScrollDialog(props) {
-  const [answers, setAnswers] = React.useState([]);
-  const [answer, setAnswer] = React.useState('');
-  const [loading, setLoading] = React.useState(true);
-  const [firstExpanded, setFirstExpanded] = React.useState(false);
-  const { URL, auth, token, axios } = React.useContext(MyContext);
-  const { post, expanded } = props
+  const [answers, setAnswers] = useState([]);
+  const [answer, setAnswer] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [firstExpanded, setFirstExpanded] = useState(false);
+  const { URL, auth, token, axios } = useContext(MyContext);
+  const { post, expanded, set } = props
 
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (expanded && !firstExpanded) {
       setLoading(true)
       axios.get(`${URL}answers/${post.id}`)
       .then(res => {
         setAnswers(res.data)
+        set(res.data.length)
         setLoading(false)
         setFirstExpanded(true)
       })
@@ -30,14 +31,18 @@ export default function ScrollDialog(props) {
       axios.get(`${URL}answers/${post.id}`)
       .then(res => {
         setAnswers(res.data)
+        set(res.data.length)
         setLoading(false)
       })
     }
-  }, [post.id, URL, expanded, axios, firstExpanded])
+  }, [post.id, URL, expanded, axios, firstExpanded, set])
 
   const fetchAnswers = () => {
     axios.get(`${URL}answers/${post.id}`)
-      .then(res => { setAnswers(res.data) })
+      .then(res => { 
+        setAnswers(res.data) 
+        set(res.data.length)
+      })
   }
 
 

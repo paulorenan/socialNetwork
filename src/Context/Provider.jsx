@@ -21,12 +21,11 @@ function Provider({children}) {
       setToken(storageToken)
       setUser(JSON.parse(storageUser))
     }
-    fetchPosts()
-  }
-  , [])
+    fetchPosts(10)
+  }, [])
 
-  async function fetchPosts() {
-    const res = await axios.get(`${URL}posts`)
+  async function fetchPosts(limit) {
+    const res = await axios.get(`${URL}posts?limit=${limit}`)
     setPosts(res.data)
   }
 
