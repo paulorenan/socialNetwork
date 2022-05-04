@@ -81,7 +81,7 @@ function Profile() {
       });
   }, [nickname, URL, axios])
 
-  useEffect(() => {
+  useEffect(() => { // get posts
     if (userLink) {
       axios.get(`${URL}posts/user/${userLink.id}`)
         .then(res => {
@@ -90,6 +90,9 @@ function Profile() {
           setError(true)
           setLoading(false)
         });
+    }
+    return () => {
+      setPosts([])
     }
   }, [userLink, URL, axios])
 
