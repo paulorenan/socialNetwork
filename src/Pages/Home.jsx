@@ -39,6 +39,10 @@ function Home() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit])
 
+  const fetch = () => {
+    fetchPosts(limit)
+  }
+
   useEffect(() => {
     const theEnd = posts.find(post => post.id === 7)
     if (theEnd) {
@@ -61,7 +65,7 @@ function Home() {
       >
         {auth ? <WritePost /> : <NotLogged />}
         {posts.map(post => (
-          <PostCard key={post.id} post={post} />
+          <PostCard key={post.id} post={post} fetch={fetch} />
         ))}
         {!end && <div ref={loaderRef} className='loader'>
           <img src={loadingGif} alt='loading' style={{ width: '100px' }} />

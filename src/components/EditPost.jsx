@@ -3,11 +3,11 @@ import { DialogActions, DialogContent, DialogTitle, Dialog, TextField, MenuItem,
 import LoadingButton from '@mui/lab/LoadingButton';
 import MyContext from '../Context';
 
-export default function EditPost({post, click}) {
+export default function EditPost({post, click, fetch}) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
-  const { URL, axios, fetchPosts } = useContext(MyContext);
+  const { URL, axios } = useContext(MyContext);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -31,7 +31,7 @@ export default function EditPost({post, click}) {
       axios.put(`${URL}posts/${post.id}`, { content })
         .then(() => {
           setLoading(false);
-          fetchPosts();
+          fetch();
           setOpen(false);
         }).catch(() => {
           setLoading(false);

@@ -29,7 +29,7 @@ const ExpandMore = styled((props) => {
 }));
 
 function PostCard(props) {
-  const { post } = props
+  const { post, fetch } = props
   const { user, auth, URL, axios } = useContext(MyContext)
   const [expanded, setExpanded] = useState(false);
   const [like, setLike] = useState(false)
@@ -172,8 +172,8 @@ function PostCard(props) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <EditPost post={post} click={handleCloseUserMenu}/>
-              <DeletePost post={post} click={handleCloseUserMenu} comment={numberComments}/>
+              <EditPost post={post} click={handleCloseUserMenu} fetch={fetch} />
+              <DeletePost post={post} click={handleCloseUserMenu} fetch={fetch} />
             </Menu>
           </>
         }

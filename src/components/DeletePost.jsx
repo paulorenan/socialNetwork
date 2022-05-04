@@ -4,7 +4,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import MyContext from '../Context';
 import CardForDelete from '../components/CardForDelete';
 
-export default function DeletePost({post, click, comment}) {
+export default function DeletePost({post, click, fetch}) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { URL, axios, fetchPosts } = useContext(MyContext);
@@ -22,7 +22,7 @@ export default function DeletePost({post, click, comment}) {
     axios.delete(`${URL}posts/${post.id}`)
       .then(() => {
         setLoading(false);
-        fetchPosts();
+        fetch();
         setOpen(false);
       }).catch(() => {
         setLoading(false);

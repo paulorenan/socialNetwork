@@ -93,6 +93,16 @@ function Profile() {
     }
   }, [userLink, URL, axios])
 
+  const fetch = async () => {
+    axios.get(`${URL}posts/user/${userLink.id}`)
+      .then(res => {
+        setPosts(res.data)
+      }).catch(() => {
+        setError(true)
+        setLoading(false)
+      });
+  }
+
   useEffect(() => { // fetch followers
     if (userLink) {
       setLoadingFollowers(true)
@@ -290,7 +300,7 @@ function Profile() {
               </Box>
             </Box>
             {posts.map(post => (
-              <PostCard key={post.id} post={post} />
+              <PostCard key={post.id} post={post} fetch={fetch} />
             ))}
           </>
         )}

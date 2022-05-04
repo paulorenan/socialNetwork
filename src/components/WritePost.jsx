@@ -30,7 +30,7 @@ export default function WritePost() {
         content: newPost,
         image: image
       }).then(() => {
-          fetchPosts()
+          fetchPosts(10)
           setNewPost('')
           setLoading(false)
         }).catch(err => {
