@@ -8,10 +8,6 @@ import './App.css';
 function App() {
   const { loading } = useContext(MyContext);
 
-  React.useEffect(() => {
-    console.log('loading', loading);
-  }, [loading]);
-
   return (
     <>
     {loading ? <LoadingRoute /> : (

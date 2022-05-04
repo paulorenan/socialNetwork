@@ -51,6 +51,7 @@ function Provider({children}) {
     if (token) {
       load();
     }
+    setLoading(false);
   }, [token])
 
   useEffect(() => {
