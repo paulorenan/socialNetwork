@@ -4,6 +4,8 @@ import Home from '../Pages/Home';
 import Profile from '../Pages/Profile';
 import NotFound from '../Pages/NotFound';
 import MyContext from '../Context';
+import Login from '../Pages/Login';
+import SignUp from '../Pages/SignUp';
 
 function AuthRoutes() {
   const { auth } = useContext(MyContext);
@@ -11,13 +13,18 @@ function AuthRoutes() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/p/:nickname" element={<Profile />} />
-      {auth && (
+      {auth ? (
         <>
         <Route path="/login" element={<Navigate to="/" />} />
-        <Route path="/register" element={<Navigate to="/" />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/signup" element={<Navigate to="/" />} />
         </>
-      )}
+      ) : (
+        <>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+        </>
+          )};
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }

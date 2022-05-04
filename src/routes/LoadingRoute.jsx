@@ -5,7 +5,6 @@ import Loading from '../Pages/Loading';
 function LoadingRoute() {
   return (
     <Routes>
-      <Route path="/:way" element={<Loading />} />
       <Route path="*" element={<Loading />} />
     </Routes>
   )

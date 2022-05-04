@@ -32,9 +32,10 @@ function Provider({children}) {
 
 
   useEffect(() => {
+    const storageToken = localStorage.getItem('token')
     async function load() {
       setLoading(true)
-      axios.defaults.headers.common['Authorization'] = token;
+      axios.defaults.headers.common['Authorization'] = storageToken;
       try{
         const load1 = await axios.post(`${URL}load`);
         if(load1.status === 200){
@@ -48,11 +49,12 @@ function Provider({children}) {
         setLoading(false);
       }
     }
-    if (token) {
+    if (storageToken) {
       load();
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
-  }, [token])
+  }, [])
 
   useEffect(() => {
     if (auth) {

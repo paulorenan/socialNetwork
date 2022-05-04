@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import MyContext from './Context';
 import AuthRoutes from './routes/AuthRoutes';
-import NotAuthRoutes from './routes/NotAuthRoutes';
 import LoadingRoute from './routes/LoadingRoute';
 import './App.css';
 
@@ -10,12 +9,7 @@ function App() {
 
   return (
     <>
-    {loading ? <LoadingRoute /> : (
-      <>
-      <AuthRoutes />
-      <NotAuthRoutes />
-      </>
-    )}
+    {loading ? <LoadingRoute /> : ( <AuthRoutes /> )}
     </>
   );
 }
