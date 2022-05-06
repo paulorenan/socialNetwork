@@ -40,6 +40,7 @@ function PostCard(props) {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [postLike, setPostLike] = useState([])
   const [loadLike, setLoadLike] = useState(true)
+  const [loadingData, setLoadingData] = useState(true)
   const navigate = useNavigate()
 
   const handleOpenUserMenu = (event) => {
@@ -116,6 +117,7 @@ function PostCard(props) {
   }, [URL, axios, post.id])
 
   useEffect(() => {
+    setLoadingData(true)
     const date = isMoment(post.createdAt).fromNow()
     const splitDate = date.split('')
     const arrDate = []
@@ -125,11 +127,15 @@ function PostCard(props) {
       arrDate[1] = splitDate[0]
       splitDate.shift();
     }
-    if(splitDate.join('').includes('days')&& (arrDate.join('') > 3)) {
+    const joinDate = splitDate.join('')
+    if(joinDate.includes('days') && (arrDate.join('') > 3)) {
+      setMoment(true)
+    } else if (joinDate.includes('month')) {
       setMoment(true)
     } else {
       setMoment(false)
     }
+    setLoadingData(false)
   }, [post.createdAt])
 
   const handleNavigate = () => {
@@ -185,11 +191,11 @@ function PostCard(props) {
             >
               {post.user.name}
             </Box>
-            { moment ? 
-            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).format('ll')}</Box> 
-            : 
-            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
-            }
+            {!loadingData && (moment ?
+              <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).format('ll')}</Box> 
+              : 
+              <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
+            )}
           </Box>
         } 
         subheader={

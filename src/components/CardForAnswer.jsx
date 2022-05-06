@@ -16,6 +16,7 @@ export default function CardForAnswer({ post, fetch }) {
   const [ showMore, setShowMore ]  = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [moment, setMoment] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
   const { user, auth } = useContext(MyContext);
   const navigate = useNavigate()
 
@@ -36,6 +37,7 @@ export default function CardForAnswer({ post, fetch }) {
   }, [user, post, auth]);
 
   useEffect(() => {
+    setLoadingData(true)
     const date = isMoment(post.createdAt).fromNow()
     const splitDate = date.split('')
     const arrDate = []
@@ -45,11 +47,15 @@ export default function CardForAnswer({ post, fetch }) {
       arrDate[1] = splitDate[0]
       splitDate.shift();
     }
-    if(splitDate.join('').includes('days')&& (arrDate.join('') > 3)) {
+    const joinDate = splitDate.join('')
+    if(joinDate.includes('days') && (arrDate.join('') > 3)) {
+      setMoment(true)
+    } else if (joinDate.includes('month')) {
       setMoment(true)
     } else {
       setMoment(false)
     }
+    setLoadingData(false)
   }, [post.createdAt])
 
   const handleNavigate = () => {
@@ -107,11 +113,11 @@ export default function CardForAnswer({ post, fetch }) {
             >
               {post.user.name}
             </Box>
-            { moment ? 
-            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).format('ll')}</Box> 
-            : 
-            <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
-            }
+            {!loadingData && (moment ?
+              <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).format('ll')}</Box> 
+              : 
+              <Box sx={{ ml: 1 }}>{isMoment(post.createdAt).fromNow()}</Box>
+            )}
           </Box>
         } 
         subheader={
