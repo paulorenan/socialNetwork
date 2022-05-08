@@ -54,7 +54,6 @@ export default function WritePost() {
         },
         body: formData,
       })
-      console.log(urlImage)
       const data = await urlImage.json()
       setImage(data.data.link)
     }
