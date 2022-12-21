@@ -12,7 +12,7 @@ function Provider({children}) {
   const navigate = useNavigate()
   // const URL = 'http://localhost:5432/api/'
   // const URL = 'https://the-social-back.herokuapp.com/api/'
-  const URL = 'https://social-back.vercel.app/api/'
+  const URL = 'https://socialback.onrender.com/api/'
   const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
 
   useEffect(() => {
