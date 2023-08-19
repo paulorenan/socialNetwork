@@ -132,6 +132,8 @@ function PostCard(props) {
       setMoment(true)
     } else if (joinDate.includes('month')) {
       setMoment(true)
+    } else if (joinDate.includes('year')) {
+      setMoment(true)
     } else {
       setMoment(false)
     }
